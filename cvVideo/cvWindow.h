@@ -1,5 +1,5 @@
 #pragma once
-#include <QGridLayout>
+#include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
 #include <QImage>
@@ -8,7 +8,7 @@
 #include <highgui.h>
 
 
-class cvWindow : public QWidget
+class cvWindow : public QMainWindow
 {
     Q_OBJECT
 

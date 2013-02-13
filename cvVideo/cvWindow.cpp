@@ -17,11 +17,12 @@ cvWindow::cvWindow()
     resize(480, 240);
 
     _menu = new QMenu("File");
-    _menu->addAction("Open", this, SLOT(_open()));
+    _menu->addAction("Op3n", this, SLOT(_open()));
     _menu->addSeparator();
-    _menu->addAction("Exit");
-    _menu->addAction("Exit", this, SLOT(close()));
+    _menu->addAction("Ex1t", this, SLOT(close()));
     _menu_bar.addMenu(_menu);
+
+	setMenuBar(&_menu_bar);
 }
 
 cvWindow::~cvWindow()
