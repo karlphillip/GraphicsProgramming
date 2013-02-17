@@ -10,3 +10,7 @@ This is a OpenGL/Qt demo that renders the Ingress logo on a texture and performs
 cvVideo
 --------------
 An application that shows how to create a Qt window to display videos loaded with OpenCV.
+
+cvImage
+--------------
+A simple Qt/OpenCV example that displays an image and the RGB values of a pixel based on the mouse coordinates.
