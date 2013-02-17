@@ -73,7 +73,7 @@ void cvImage::_open()
     _image = new QImage(img.size().width, img.size().height, QImage::Format_RGB888);
 
     // Copy cv::Mat to QImage
-    qMemCopy(_image->scanLine(0), (unsigned char*)img.data, _image->width() * _image->height() * img.channels());
+    memcpy(_image->scanLine(0), (unsigned char*)img.data, _image->width() * _image->height() * img.channels());
 
     // Set the filename as the window title
     setWindowTitle(filename);

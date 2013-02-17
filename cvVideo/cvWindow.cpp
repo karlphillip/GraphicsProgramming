@@ -61,7 +61,7 @@ void cvWindow::_tick()
     cv::cvtColor(frame, frame, CV_BGR2RGB);
 
     // Copy cv::Mat to QImage
-    qMemCopy(_image->scanLine(0), (unsigned char*)frame.data, _image->width() * _image->height() * frame.channels());
+    memcpy(_image->scanLine(0), (unsigned char*)frame.data, _image->width() * _image->height() * frame.channels());
 
     // The same as above, but much worst.
     //QImage img = QImage((uchar*) frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);

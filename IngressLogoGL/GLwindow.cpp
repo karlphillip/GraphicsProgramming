@@ -8,7 +8,9 @@
  */
 #include "GLwindow.h"
 
+#include <GL/glu.h>
 #include <iostream>
+
 #include <QKeyEvent>
 #include <QTimer>
 
