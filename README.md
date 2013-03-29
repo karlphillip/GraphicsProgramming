@@ -14,3 +14,7 @@ An application that shows how to create a Qt window to display videos loaded wit
 cvImage
 --------------
 A simple Qt/OpenCV example that displays an image and the RGB values of a pixel based on the mouse coordinates.
+
+cvQTcameraGL
+--------------
+This application uses OpenCV to retrieve frames from the camera and display them on a QGLWidget.
