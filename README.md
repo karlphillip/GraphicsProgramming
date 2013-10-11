@@ -18,3 +18,7 @@ A simple Qt/OpenCV example that displays an image and the RGB values of a pixel 
 cvQTcameraGL
 --------------
 This application uses OpenCV to retrieve frames from the camera and display them on a QGLWidget.
+
+ipcQTgesture
+--------------
+A Qt application that uses UtilPipeline (Intel® Perceptual Computing SDK 2013) for gesture recognition. This one is Windows only!
