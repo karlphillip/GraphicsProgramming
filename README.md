@@ -22,3 +22,7 @@ This application uses OpenCV to retrieve frames from the camera and display them
 ipcQTgesture
 --------------
 A Qt application that uses UtilPipeline (Intel® Perceptual Computing SDK 2013) for gesture recognition. This one is Windows only!
+
+cvDisplacementMapFilter
+--------------
+An app that implements the Displacement Map Filter to distort a movie clip. 
