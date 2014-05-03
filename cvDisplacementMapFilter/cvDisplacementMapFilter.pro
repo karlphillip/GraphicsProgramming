@@ -2,8 +2,8 @@ SOURCES += \
     main.cpp
 
 # On my system I have to specify g++ as compiler else it will use clang++ by default
-QMAKE_CXX=g++
-QMAKE_CC=gcc
+#QMAKE_CXX=g++
+#QMAKE_CC=gcc
 
 ## OpenCV settings for Unix/Linux
 unix:!mac {
@@ -34,10 +34,19 @@ win32 {
                    "C:\\opencv\\build\\include\\opencv" \
                    "C:\\opencv\\build\\include\\opencv2"
 
-    LIBS += -L"C:\\opencv\\build\\x86\\vc10\\lib" \
-        -lopencv_core242 \
-        -lopencv_highgui242 \
-        -lopencv_imgproc242
+    CONFIG(debug, debug | release) {
+        LIBS += -L"C:\\opencv\\build\\x86\\vc10\\lib" \
+            -lopencv_core248d \
+            -lopencv_highgui248d \
+            -lopencv_imgproc248d
+    }
+
+    CONFIG(release, debug | release) {
+        LIBS += -L"C:\\opencv\\build\\x86\\vc10\\lib" \
+            -lopencv_core248 \
+            -lopencv_highgui248 \
+            -lopencv_imgproc248
+    }
 }
 
 # Runs this app automatically after the building has succeeded

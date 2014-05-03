@@ -114,8 +114,8 @@ void cvWindow::_draw_video_frame(QPainter& painter)
 
             QImage scaled_img = _image->scaled(QSize(width(), height()), Qt::KeepAspectRatio, Qt::FastTransformation);
 
-            painter.drawImage(qRound(width()/2)  - qRound(scaled_img.size().width()/2),
-                              qRound(height()/2) - qRound(scaled_img.size().height()/2),
+            painter.drawImage(qRound(width()/2.0)  - qRound(scaled_img.size().width()/2.0),
+                              qRound(height()/2.0) - qRound(scaled_img.size().height()/2.0),
                               scaled_img);
         }
         break;
@@ -126,8 +126,8 @@ void cvWindow::_draw_video_frame(QPainter& painter)
 
             painter.drawImage(QRectF(QPoint(0, 0), QSize(width(), height())),
                                scaled_img,
-                               QRectF(QPoint(qRound(scaled_img.size().width()/2) - qRound(width()/2),
-                                             qRound(scaled_img.size().height()/2) - qRound(height()/2)),
+                               QRectF(QPoint(qRound(scaled_img.size().width()/2.0) - qRound(width()/2.0),
+                                             qRound(scaled_img.size().height()/2.0) - qRound(height()/2.0)),
                                              QSize(width(), height())));
         }
         break;

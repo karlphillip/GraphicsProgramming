@@ -1,4 +1,5 @@
 #include "widget.h"
+#include <GL/GLU.h>
 
 #include <iostream>
 #include <QKeyEvent>
