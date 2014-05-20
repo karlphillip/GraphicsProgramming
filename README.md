@@ -26,3 +26,8 @@ A Qt application that uses UtilPipeline (Intel® Perceptual Computing SDK 2013) 
 cvDisplacementMapFilter
 --------------
 An app that implements the Displacement Map Filter to distort a movie clip. 
+
+QtFPSvsTIMEanimation
+--------------
+A Qt implementation of FPS-based and Time-based animation techniques, as explained by Steven Lambert:
+http://blog.sklambert.com/using-time-based-animation-implement/
