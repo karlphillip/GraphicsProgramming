@@ -22,18 +22,23 @@ void TimeCanvas::move(float dt)
 {
     /* Update position of square */
 
-    _x += std::ceil((_dx * dt * 60) / 1000);    // (2 * 16 * 60) / 1000 --> 1.92
-
-    if (_dy > 0)
-    {
-        // If _dy is positive, round up, else animation will move sideways only
-        _y += std::ceil((_dy * dt * 60) / 1000);    // (1 * 16 * 60) / 1000 = 0.96 = 1
-    }
+    /* Rounding _dx up/down can affect the horizontal movement of the square.
+     * Rounding down when _dx is negative is essential to fix the slowness
+     * that happens when going from right to left.
+     */
+    if (_dx > 0)
+        _x += std::ceil((_dx * dt * 60) / 1000);    // (2 * 16 * 60) / 1000 = 1.92 = 2
     else
-    {
-        // If _dy is negative, round down, else animation will not bounce up
-        _y += std::floor((_dy * dt * 60) / 1000);    // (-1 * 16 * 60) / 1000 = -0.96 = -1
-    }
+        _x += std::floor((_dx * dt * 60) / 1000);   // (-2 * 16 * 60) / 1000 = -1.92 = -2
+
+    /* Rounding _dy up/down can also affect the vertical move of the square.
+     * If _dy is positive, round up, else the square will move sideways only.
+     * If _dy is negative, round down, else the square won't go up after colliding.
+     */
+    if (_dy > 0)
+        _y += std::ceil((_dy * dt * 60) / 1000);    // (1 * 16 * 60) / 1000 = 0.96 = 1
+    else        
+        _y += std::floor((_dy * dt * 60) / 1000);   // (-1 * 16 * 60) / 1000 = -0.96 = -1
 
     if ( _x <= 0 || (_x >= (width()-1) - _sq_sz) ) {
         _dx *= -1;
