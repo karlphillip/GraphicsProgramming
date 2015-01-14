@@ -1,10 +1,14 @@
-/*     GLwindow.h
+/* Copyright (C) 2012 Karl Phillip Buhr <karlphillip@gmail.com>
  *
- *     Karl Phillip Buhr, 2012, 2013
- *     karlphillip@gmail.com
- *     http://stackoverflow.com/users/176769/karlphillip
+ * This work is licensed under the Creative Commons Attribution-ShareAlike License.
+ * To view a copy of this license, visit:
+ *      https://creativecommons.org/licenses/by-sa/2.5/legalcode
  *
- *     Ingress logo with glowing effect, based on Nehe lesson 36.
+ * Or to read the human-readable summary of the license:
+ *      https://creativecommons.org/licenses/by-sa/2.5/
+ *
+ *
+ * Ingress logo with glowing effect, based on Nehe lesson 36.
  */
 #pragma once
 

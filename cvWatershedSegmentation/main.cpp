@@ -1,4 +1,14 @@
-/* A simple Watershed segmentation example, as described at:
+/* Copyright (C) 2014 Karl Phillip Buhr <karlphillip@gmail.com>
+ *
+ * This work is licensed under the Creative Commons Attribution-ShareAlike License.
+ * To view a copy of this license, visit:
+ *      https://creativecommons.org/licenses/by-sa/2.5/legalcode
+ *
+ * Or to read the human-readable summary of the license:
+ *      https://creativecommons.org/licenses/by-sa/2.5/
+ *
+ *
+ * A simple Watershed segmentation example, as described at:
  * http://stackoverflow.com/a/25851951/176769
  */
 #include <iostream>
