@@ -35,3 +35,7 @@ http://blog.sklambert.com/using-time-based-animation-implement/
 cvWatershedSegmentation
 --------------
 A simple watershed segmentation example using distance transform to segment beans.
+
+QtSerial
+--------------
+An application that prints data from a serial (COM) port connected to an Arduino.
