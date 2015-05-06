@@ -1,4 +1,4 @@
-/* Copyright (C) 2015 Karl Phillip Buhr <karlphillip@gmail.com>
+/* Copyright (C) 2013-2015 Karl Phillip Buhr <karlphillip@gmail.com>
  *
  * This work is licensed under the Creative Commons Attribution-ShareAlike License.
  * To view a copy of this license, visit:
@@ -12,6 +12,8 @@
 
 #include <QCoreApplication>
 #include <QDebug>
+#include <QByteArray>
+#include <QTextCodec>
 
 
 SerialPortReader::SerialPortReader(QSerialPort* serial, QObject* parent)
@@ -48,9 +50,15 @@ void SerialPortReader::_read_callback()
      * hence the *if* statement below just to print the value I need.
      */
     if (sz == 3 && (int)data[1] == 13 && (int)data[2] == 10)
+    {
         std::cout << data[0] << std::endl;
+    }
     else
-        std::cout << data.toStdString() << std::endl;
+    {
+        // To print data from other serial devices
+        QString str = QString::fromUtf8(data);
+        std::cout << str.toStdString();
+    }
 }
 
 void SerialPortReader::_error_callback(QSerialPort::SerialPortError error)
