@@ -14,9 +14,6 @@
 #include <QApplication>
 
 
-//HANDLE      m_hNextColorFrameEvent;
-
-
 Window::Window()
 : _tick_ms(33), _ar_mode(Qt::IgnoreAspectRatio), _fps(0),
   _video_width(640), _video_height(480), _timer(NULL), _nui_sensor(NULL)
@@ -27,9 +24,16 @@ Window::Window()
     // Initialize device and prepare it to send RGB data
     if (!_initKinect())
     {
-        std::cout << "* FAILED! Is your Kinect device connected?" << std::endl;
+        std::cout << "* FAILED! Is your Kinect device connected? Is it powered?" << std::endl;
         return;
     }
+
+    std::cout << "* Special keys: " << std::endl;
+    std::cout << "\tESC    - Quit application" << std::endl;
+    std::cout << "\tM      - Change aspect ratio" << std::endl;
+    std::cout << "\tUp     - Increase elevation" << std::endl;
+    std::cout << "\tDown   - Decrease elevation" << std::endl;
+    std::cout << "\tLEFT   - Reset elevation to 0 degrees" << std::endl;
 
     // Start timer to read frames from Kinect
     _timer = new QTimer();
@@ -44,6 +48,10 @@ Window::~Window()
         _timer->stop();
         delete _timer;
     }
+
+    // Shutdown Kinect properly
+    if (_nui_sensor)
+        _nui_sensor->NuiShutdown();
 }
 
 /* _tick(): called every few milliseconds.
@@ -53,7 +61,7 @@ void Window::_tick()
 {
     if (!_nui_sensor)
     {
-        std::cout << "_tick !!! _initKinect() failed, didn't it?!" << std::endl;
+        std::cout << "_tick !!! _initKinect() failed: ABORT!" << std::endl;
         return;
     }
 
@@ -82,6 +90,7 @@ void Window::_tick()
                         surface_desc.Width, surface_desc.Height,
                         QImage::Format_RGB32);
 
+
         // Trigger paint event to redraw the window
         if (!_image.isNull())
             emit update();
@@ -95,7 +104,7 @@ void Window::_tick()
 bool Window::_initKinect()
 {
     int sensor_count = 0;
-    if (NuiGetSensorCount(&sensor_count) < 0)
+    if (NuiGetSensorCount(&sensor_count) < 0 || sensor_count < 1)
     {
         std::cout << "_initKinect !!! NuiGetSensorCount() failed" << std::endl;
         return false;
@@ -105,28 +114,39 @@ bool Window::_initKinect()
 
     /* Look at each Kinect sensor */
 
-    for (int i = 0; i < sensor_count; ++i)
+    bool sensor_found = false;
+    for (int i = 0; i < sensor_count; i++)
     {
+        std::cout << "* Checking sensor #" << i << " ... ";
+
         // Create the sensor so we can check status, if we can't create it, move on to the next
         if (NuiCreateSensorByIndex(i, &_nui_sensor) < 0)
+        {
+            std::cout << " SKIPPED!" << std::endl;
             continue;
+        }
 
         // Get the status of the sensor, and if connected, then we can initialize it
-        if (_nui_sensor->NuiStatus() == S_OK)
+        if (_nui_sensor->NuiStatus() != S_OK)
         {
-            std::cout << "* Selected sensor #" << i << std::endl;
+            std::cout << " NOT READY!" << std::endl;
+        }
+        else
+        {
+            std::cout << " SELECTED!" << std::endl;
+            sensor_found = true;
             break;
         }
 
         // This sensor wasn't OK, so release it since we're not using it
         _nui_sensor->Release();
-    }
+    }    
 
-    if (_nui_sensor == NULL)
-    {
-        std::cout << "_initKinect !!! No compatible sensors detected" << std::endl;
+    if (_nui_sensor == NULL || !sensor_found)
+    {        
+        std::cout << "_initKinect !!! No ready Kinect found." << std::endl;
         return false;
-    }
+    }   
 
     // Initialize the Kinect and specify that we'll be using color
     if (_nui_sensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_COLOR) >= 0) // if (SUCCEEDED(hr))
@@ -212,24 +232,73 @@ void Window::keyPressEvent(QKeyEvent* event)
 {
     switch (event->key())
     {
+        // ESC: exit application
+        case Qt::Key_Escape:
+        {
+            std::cout << "* (ESC) Bye bye." << std::endl;
+            QApplication::instance()->quit();
+        }
+        break;
+
         // M: changes aspect ratio mode
         case Qt::Key_M:
         {
             if (_ar_mode == Qt::IgnoreAspectRatio)
+            {
                 _ar_mode = Qt::KeepAspectRatio;
+                std::cout << "* (M) AR = keep aspect ratio" << std::endl;
+            }
             else if (_ar_mode == Qt::KeepAspectRatio)
+            {
                 _ar_mode = Qt::KeepAspectRatioByExpanding;
+                std::cout << "* (M) AR = keep aspect ratio by expanding" << std::endl;
+            }
             else
+            {
                 _ar_mode = Qt::IgnoreAspectRatio;
+                std::cout << "* (M) AR = ignore aspect ratio" << std::endl;
+            }
         }
         break;
 
-        // ESC: exit application
-        case Qt::Key_Escape:
+        // Up arrow: increases elevation angle by 2 degrees
+        case Qt::Key_Up:
         {
-            std::cout << "* Bye bye." << std::endl;
-            QApplication::instance()->quit();
+            long angle = -1;
+            if (NuiCameraElevationGetAngle(&angle) >= 0)
+            {
+                angle += 2;
+                if (NuiCameraElevationSetAngle(angle) >= 0)
+                    std::cout << "* (UP) Current elevation angle: " << angle << std::endl;
+            }
         }
         break;
+
+        // Down arrow: decreases elevation angle by 2 degrees
+        case Qt::Key_Down:
+        {
+            long angle = -1;
+            if (NuiCameraElevationGetAngle(&angle) >= 0)
+            {
+                angle -= 2;
+                if (NuiCameraElevationSetAngle(angle) >= 0)
+                    std::cout << "* (DOWN) Current elevation angle: " << angle << std::endl;
+            }
+        }
+        break;
+
+        // Left arrow: reset elevation angle
+        case Qt::Key_Left:
+        {
+            long angle = -1;
+            if (NuiCameraElevationGetAngle(&angle) >= 0)
+            {
+                angle = 0;
+                if (NuiCameraElevationSetAngle(angle) >= 0)
+                    std::cout << "* (LEFT) Current elevation angle: " << angle << std::endl;
+            }
+        }
+        break;
+
     }
 }
