@@ -39,3 +39,8 @@ A simple watershed segmentation example using distance transform to segment bean
 QtSerial
 --------------
 An application that prints data from a serial (COM) port connected to an Arduino.
+
+qtKinectVideo
+--------------
+An application based on "Color Basics" from Kinect for Windows SDK 1.8. 
+This demo shows how to display the Color Stream on your Qt application.
