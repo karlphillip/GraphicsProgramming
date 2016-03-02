@@ -27,15 +27,22 @@ unix:!mac {
         -lopencv_imgproc
 }
 
-## OpenCV settings for Mac OS X
+## OpenCV settings for Mac OS X with OpenCV 3.1
 macx {
     message("* Using settings for Mac OS X.")
-    INCLUDEPATH += /usr/local/include/opencv
 
-    LIBS += -L/usr/local/lib/ \
+    # Solve imwrite() undefined symbol
+    QMAKE_CXXFLAGS += -stdlib=libc++
+
+    INCLUDEPATH += "/usr/local/opt/opencv3/include"
+
+    LIBS += -L"/usr/local/opt/opencv3/lib" \
         -lopencv_core \
         -lopencv_highgui \
-        -lopencv_imgproc
+        -lopencv_imgproc \
+        -lopencv_imgcodecs \
+        -lopencv_videoio \
+        -lc++
 }
 
 ## OpenCV settings for Windows and OpenCV 2.4.2

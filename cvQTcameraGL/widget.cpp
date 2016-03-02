@@ -8,8 +8,11 @@
  *      https://creativecommons.org/licenses/by-sa/2.5/
  */
 #include "widget.h"
-#include <GL/GLU.h>
-
+#ifndef __APPLE__
+    #include <GL/GLU.h>
+#else
+    #include <glu.h>
+#endif
 #include <iostream>
 #include <QKeyEvent>
 #include <QTimer>
