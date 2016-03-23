@@ -3,19 +3,26 @@
 #include <QImage>
 #include <QLabel>
 
-// http://stackoverflow.com/a/25878225/176769
-// http://mycodelog.com/2010/05/16/interpolation/
-#if 0
-QImage smooth_color_transition(const QImage& input, const QVector<QColor>& color_vec)
+/*
+ * ColorMaps:
+ *   http://jdherman.github.io/colormap/
+ *   http://www.mathworks.com/matlabcentral/mlc-downloads/downloads/submissions/35242/versions/2/screenshot.jpg
+ *   http://www.r-bloggers.com/gmt-standard-color-palettes/
+ *
+ * Linear interpolation:
+ *   http://stackoverflow.com/a/25878225/176769
+ *   http://mycodelog.com/2010/05/16/interpolation/
+ */
+
+// Artificial colorization of an image based in 2 starting colors
+QImage smooth_color_transition(const QImage& input, const QColor color_src, const QColor color_dst)
 {
     QImage output(input.size(), input.format());
 
-    QColor color_src = color_vec.at(0);
     unsigned int r1 = color_src.red();
     unsigned int g1 = color_src.green();
     unsigned int b1 = color_src.blue();
 
-    QColor color_dst = color_vec.at(1);
     unsigned int r2 = color_dst.red();
     unsigned int g2 = color_dst.green();
     unsigned int b2 = color_dst.blue();
@@ -38,21 +45,20 @@ QImage smooth_color_transition(const QImage& input, const QVector<QColor>& color
 
     return output;
 }
-#endif
 
-
+// Artificial colorization of an image based on color palette (vector)
 QImage smooth_color_transition(const QImage& input, const QVector<QColor>& color_vec)
 {
     if (color_vec.size() < 2)
         return QImage();
 
-    QImage output(input.size(), input.format());
+    QImage output(input.size(), QImage::Format_RGB888);
 
     int num_colors = color_vec.size();
-    std::cout << "Num colors:" << color_vec.size() << std::endl;
+    //std::cout << "Num colors:" << color_vec.size() << std::endl;
 
     int color_width = 256 / (color_vec.size()-1);
-    std::cout << "Color width:" << color_width << std::endl;
+    //std::cout << "Color width:" << color_width << std::endl;
 
     QVector<QColor> pallete;
     for (int c = 1; c < num_colors; c++)
@@ -72,10 +78,9 @@ QImage smooth_color_transition(const QImage& input, const QVector<QColor>& color
             float p = i / (float)color_width; // percentage
 
             //Resultant Color = RGB(A*(1-P)+X*P, B*(1-P)+Y*P, C*(1-P)+Z*P)
-
             int r = (int) r1 * (1-p) + r2 * p;
             int g = (int) g1 * (1-p) + g2 * p;
-            int b = (int) b1 * (1-p) + b2 * p;
+            int b = (int) b1 * (1-p) + b2 * p;            
             pallete.push_back(qRgb(r, g, b));
         }
     }
@@ -84,7 +89,7 @@ QImage smooth_color_transition(const QImage& input, const QVector<QColor>& color
     for (int i = pallete.size(); i < 256; i++)
         pallete.push_back(color_vec[color_vec.size()-1].rgb());
 
-    std::cout << "Pallete size:" << pallete.size() << std::endl;
+    //std::cout << "Pallete size:" << pallete.size() << std::endl;
 
     for (int x = 0; x < input.width(); x++)
     {
@@ -106,7 +111,10 @@ int main(int argc, char* argv[])
 
     QImage input("/Users/karlphillip/workspace/GraphicsProgramming/qtSmoothColorTransition/heightmap.jpg");
     if (input.isNull())
+    {
+        std::cout << "!!! Unable to load image" << std::endl;
         return -1;
+    }
 
     QLabel input_label;
     input_label.setPixmap(QPixmap::fromImage(input));
@@ -114,29 +122,120 @@ int main(int argc, char* argv[])
     input_label.show();
 
     QVector<QColor> colors;
-    colors.push_back(QColor(0, 120, 200));      // dark blue
-    colors.push_back(QColor(120, 220, 255));    // cyan
-    colors.push_back(QColor(71, 141, 104));     // dark green
-    colors.push_back(QColor(106, 168, 107));    // medium green
-    colors.push_back(QColor(141, 173, 132));    // light green
-    colors.push_back(QColor(166, 191, 151));    // super light green
-    colors.push_back(QColor(217, 233, 188));    // sand yellow
-    colors.push_back(QColor(185, 140, 90));     // light orange
-    colors.push_back(QColor(162, 90, 34));      // light red
-    colors.push_back(QColor(144, 61, 45));      // dark red
-    colors.push_back(QColor(151, 68, 64));      // super dark red
-    colors.push_back(QColor(156, 146, 170));    // purple-red
-    colors.push_back(QColor(170, 170, 210));    // purple-white
-    colors.push_back(QColor(240, 247, 243));    // white
 
+    // Terrain
+    colors.push_back(QColor(1, 1, 48));         // dark blue
+    colors.push_back(QColor(29, 24, 245));      // blue
+    colors.push_back(QColor(0, 255, 254));      // cyan
+    colors.push_back(QColor(0, 100, 56));       // dark green
+    colors.push_back(QColor(0, 127, 63));       // green-1
+    colors.push_back(QColor(3, 153, 72));       // green-2
+    colors.push_back(QColor(54, 178, 86));      // green-3
+    colors.push_back(QColor(116, 204, 119));    // light green
+    colors.push_back(QColor(173, 229, 161));    // light green-2
+    colors.push_back(QColor(227, 255, 209));    // sand
+    colors.push_back(QColor(186, 192, 107));    // dark sand
+    colors.push_back(QColor(184, 90, 35));      // dark orange
+    colors.push_back(QColor(105, 42, 0));       // dark red
+    //colors.push_back(QColor(245, 245, 250));    // snow
+
+/*
+    // jet
+    colors.push_back(QColor(0, 0, 191));
+    colors.push_back(QColor(0, 0, 255));
+    colors.push_back(QColor(0, 64, 255));
+    colors.push_back(QColor(0, 128, 255));
+    colors.push_back(QColor(0, 191, 255));
+    colors.push_back(QColor(0, 255, 255));
+    colors.push_back(QColor(64, 255, 191));
+    colors.push_back(QColor(128, 255, 128));
+    colors.push_back(QColor(64, 255, 191));
+    colors.push_back(QColor(191, 255, 64));
+    colors.push_back(QColor(255, 255, 0));
+    colors.push_back(QColor(255, 191, 0));
+    colors.push_back(QColor(255, 191, 0));
+    colors.push_back(QColor(255, 128, 0));
+    colors.push_back(QColor(255, 64, 0));
+    colors.push_back(QColor(255, 0, 0));
+    colors.push_back(QColor(191, 0, 0));
+    colors.push_back(QColor(128, 64, 0));
+*/
+
+/*
+    // BGR
+    colors.push_back(QColor(0, 0, 255));
+    colors.push_back(QColor(0, 255, 0));
+    colors.push_back(QColor(255, 0, 0));
+*/
+
+/*
+    // hot
+    colors.push_back(QColor(43, 0, 0));
+    colors.push_back(QColor(85, 0, 0));
+    colors.push_back(QColor(128, 0, 0));
+    colors.push_back(QColor(170, 0, 0));
+    colors.push_back(QColor(213, 0, 0));
+    colors.push_back(QColor(255, 0, 0));
+    colors.push_back(QColor(255, 43, 0));
+    colors.push_back(QColor(255, 85, 0));
+    colors.push_back(QColor(255, 128, 0));
+    colors.push_back(QColor(255, 170, 0));
+    colors.push_back(QColor(255, 213, 0));
+    colors.push_back(QColor(255, 255, 0));
+    colors.push_back(QColor(255, 255, 64));
+    colors.push_back(QColor(255, 255, 128));
+    colors.push_back(QColor(255, 255, 191));
+    colors.push_back(QColor(255, 255, 255));
+*/
+
+/*
+    // cool
+    colors.push_back(QColor(0, 255, 255));
+    colors.push_back(QColor(17, 238, 255));
+    colors.push_back(QColor(34, 221, 255));
+    colors.push_back(QColor(51, 204, 255));
+    colors.push_back(QColor(68, 187, 255));
+    colors.push_back(QColor(85, 170, 255));
+    colors.push_back(QColor(102, 153, 255));
+    colors.push_back(QColor(68, 187, 255));
+    colors.push_back(QColor(85, 170, 255));
+    colors.push_back(QColor(102, 153, 255));
+    colors.push_back(QColor(119, 136, 255));
+    colors.push_back(QColor(136, 119, 255));
+    colors.push_back(QColor(153, 102, 255));
+    colors.push_back(QColor(170, 85, 255));
+    colors.push_back(QColor(187, 68, 255));
+    colors.push_back(QColor(204, 51, 255));
+    colors.push_back(QColor(221, 34, 255));
+    colors.push_back(QColor(238, 17, 255));
+    colors.push_back(QColor(255, 0, 255));
+*/
+
+/*
+    // water temperature
+    colors.push_back(QColor(41, 10, 216));
+    colors.push_back(QColor(38, 77, 255));
+    colors.push_back(QColor(63, 160, 255));
+    colors.push_back(QColor(114, 217, 255));
+    colors.push_back(QColor(140, 247, 255));
+    colors.push_back(QColor(224, 255, 255));
+    colors.push_back(QColor(255, 255, 191));
+    colors.push_back(QColor(255, 224, 153));
+    colors.push_back(QColor(255, 255, 191));
+    colors.push_back(QColor(255, 173, 114));
+    colors.push_back(QColor(247, 109, 94));
+    colors.push_back(QColor(216, 38, 50));
+    colors.push_back(QColor(164, 0, 33));
+*/
+
+    // Build colored elevation map
     QImage output = smooth_color_transition(input, colors);
+    output.save("/Users/karlphillip/workspace/GraphicsProgramming/qtSmoothColorTransition/output.jpg");
 
     QLabel output_label;
     output_label.setPixmap(QPixmap::fromImage(output));
     output_label.resize(output.width(), output.height());
     output_label.show();
-
-    output.save("colored.jpg");
 
     return app.exec();
 }
