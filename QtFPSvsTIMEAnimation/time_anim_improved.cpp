@@ -9,7 +9,7 @@
  */
 #include "time_anim_improved.h"
 
-#include <qDebug>
+#include <QDebug>
 
 
 TimeAnimationImproved::TimeAnimationImproved(QWidget* parent)
@@ -76,7 +76,7 @@ void TimeAnimationImproved::_tick()
     }
 
     // 10 FPS canvas must be draw once every 6x
-    if (_counter % 10 == 0)
+    if (_counter % 6 == 0)
     {
         // Compute how much time passed since the last update
         qint64 passed = now - _last_time_10fps;
