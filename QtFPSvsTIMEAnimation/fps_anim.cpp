@@ -58,7 +58,7 @@ void FrameAnimation::_tick()
         _blue_canvas->draw();
 
     // 10 FPS canvas must be draw once every 6x
-    if (_counter % 10 == 0)
+    if (_counter % 6 == 0)
         _red_canvas->draw();
 
     _counter++;
