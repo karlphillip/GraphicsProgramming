@@ -27,14 +27,13 @@ cvDisplacementMapFilter
 --------------
 An app that implements the Displacement Map Filter to distort a movie clip. 
 
-QtFPSvsTIMEanimation
---------------
-A Qt implementation of FPS-based and Time-based animation techniques, as explained by Steven Lambert:
-http://blog.sklambert.com/using-time-based-animation-implement/
-
 cvWatershedSegmentation
 --------------
 A simple watershed segmentation example using distance transform to segment beans.
+
+cvFruitClassification
+--------------
+A C++/OpenCV port of [a cool Python application](http://github.com/eliezerb/FruitClassification) that performs Oranges vs Apples classification using LDA.
 
 QtSerial
 --------------
@@ -45,10 +44,11 @@ qtKinectVideo
 An application based on "Color Basics" from Kinect for Windows SDK 1.8. 
 This demo shows how to display the Color Stream on your Qt application.
 
+QtFPSvsTIMEanimation
+--------------
+A Qt implementation of FPS-based and Time-based animation techniques, as explained by Steven Lambert:
+http://blog.sklambert.com/using-time-based-animation-implement/
+
 qtSmoothColorTransition
 --------------
 A demo that takes a grayscale image as input and performs a smooth color transition from a color palette using linear interpolation.
-
-FruitClassification
---------------
-A C++/OpenCV port of [a cool Python application](http://github.com/eliezerb/FruitClassification) that performs Oranges vs Apples classification using LDA.
