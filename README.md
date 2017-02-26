@@ -48,3 +48,7 @@ This demo shows how to display the Color Stream on your Qt application.
 qtSmoothColorTransition
 --------------
 A demo that takes a grayscale image as input and performs a smooth color transition from a color palette using linear interpolation.
+
+FruitClassification
+--------------
+A C++/OpenCV port of [a cool Python application](http://github.com/eliezerb/FruitClassification) that performs Oranges vs Apples classification using LDA.
