@@ -3,6 +3,10 @@ GraphicsProgramming
 
 Demos related to **OpenGL**, **Qt**, **OpenCV** and other X technologies.
 
+LinearRegression
+--------------
+A C++/Eigen implementation of Linear Regression based on [Daniel Shiffman's tutorials](https://www.youtube.com/watch?v=szXbuO3bVRk). Data is plotted with [Madplotlib](https://github.com/madplotlib/madplotlib).
+
 IngressLogoGL
 --------------
 This is a OpenGL/Qt demo that renders the Ingress logo on a texture and performs a blur to add a *cool* effect to the logo.
