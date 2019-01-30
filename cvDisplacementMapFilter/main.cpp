@@ -21,7 +21,8 @@
  * output: the destination Mat.
  * location: offset starting point.
  */
-void overlayImage(const cv::Mat &background, const cv::Mat &foreground, cv::Mat &output, cv::Point2i location)
+//void overlayImage(const cv::Mat &background, const cv::Mat &foreground, cv::Mat &output, cv::Point2i location)
+void overlayImage(const cv::Mat &background, const cv::Mat &foreground, cv::Mat &output, cv::Point2i location, double opacity = 1.0)
 {
     background.copyTo(output);
 
@@ -42,13 +43,15 @@ void overlayImage(const cv::Mat &background, const cv::Mat &foreground, cv::Mat 
                 break;
 
             // determine the opacity of the foregrond pixel, using its fourth (alpha) channel.
-            double opacity = ((double)foreground.data[fY * foreground.step + fX * foreground.channels() + 3]) / 255.;
+            double opacity_level = ((double)foreground.data[fY * foreground.step + fX * foreground.channels() + 3]) / 255.;
+            if (opacity >= 0.0 && opacity < 1.0)
+                opacity_level *= opacity;
 
             // and now combine the background and foreground pixel, using the opacity, but only if opacity > 0.
-            for (int c = 0; opacity > 0 && c < output.channels(); ++c) {
+            for (int c = 0; opacity_level > 0 && c < output.channels(); ++c) {
                 unsigned char foregroundPx = foreground.data[fY * foreground.step + fX * foreground.channels() + c];
                 unsigned char backgroundPx = background.data[y * background.step + x * background.channels() + c];
-                output.data[y*output.step + output.channels()*x + c] = backgroundPx * (1.-opacity) + foregroundPx * opacity;
+                output.data[y*output.step + output.channels()*x + c] = backgroundPx * (1.-opacity_level) + foregroundPx * opacity_level;
             }
         }
     }
@@ -105,53 +108,97 @@ void displacementMapFilter(const cv::Mat& map, const cv::Mat& target, int compon
         return;
     }
 
-    output.create(target.rows, target.cols, target.type());
+    if (map.channels() != target.channels() && map.channels() != 4)
+    {
+        std::cout << "!!! displacementMapFilter: map must have 1, 3 or 4 channels" << std::endl;
+        return;
+    }
 
-    for (int x = 0; x < output.rows; x++)
-        for (int y = 0; y < output.cols; y++)
+//    cv::imwrite("1_map.png", map);
+//    cv::imwrite("1_target.png", target);
+
+    output.create(target.rows, target.cols, target.type());
+//    std::cout << "output  " << output.cols << "x" << output.rows << " channels:" << output.channels() << " type:" << output.type() << std::endl;
+
+    cv::Vec4b pixelBGRA;
+    cv::Vec3b pixelBGR;
+    for (int y = 0; y < output.rows; y++)
+    {
+        const uchar* ptr = map.ptr(y); // row defined by Y
+        for (int x = 0; x < output.cols; x++)
         {
             /* Formula:
             *  dstPixel[x, y] = srcPixel[x + ((componentX(x, y) - 128) * scaleX) / 256,
             *                            y + ((componentY(x, y) - 128) * scaleY) / 256)]
             */
 
-            int dx = x + (getComponent(map.at<cv::Vec3b>(x, y), componentX) - 128) * scaleX / 256;
-            if (dx < 0) dx = 0;
-            if (dx >= output.rows) dx = output.rows;
+            int idx = (y * output.channels() * output.cols) + (x * output.channels()); // mapping 2D coordinates to 1D
+//            std::cout << "x:" << x << " y:" << y << " idx:" << idx << std::endl;
 
-            int dy = y + (getComponent(map.at<cv::Vec3b>(x, y), componentY) - 128) * scaleY / 256;
-            if (dy < 0) dy = 0;
-            if (dy >= output.cols) dy = output.cols;
+            // Access specific pixel/component from Map
+            const uchar* pixel = ptr;
+            int dx = x + (pixel[componentX] - 128) * scaleX / 256;
+            int dy = y + (pixel[componentY] - 128) * scaleY / 256;
 
-            output.at<cv::Vec4b>(x, y) = target.at<cv::Vec4b>(dx, dy);
+            // Take care of cases that go being image dimensions
+            if (dx < 0)             dx = 0;
+            if (dx >= output.cols)  dx = output.cols - 1;
+            if (dy < 0)             dy = 0;
+            if (dy >= output.rows)  dy = output.rows - 1;
+
+            output.at<cv::Vec4b>(y, x) = target.at<cv::Vec4b>(dy, dx);
+
+            ptr += map.channels();
         }
+    }
 }
-
 
 int main(int argc, char* argv[])
 {
-    // Load input map (colored, 3-channel, BGR)
+    /* Load dispersion map: usually 3-channel (BGR) */
+
     cv::Mat map = cv::imread("map.jpg");
     if (map.empty())
     {
         std::cout << "!!! Failed imread() #1" << std::endl;
         return -1;
     }
-    std::cout << "map size: " << map.cols << "x" << map.rows << " channels:" << map.channels() << " type:" << map.type() << std::endl;
+    std::cout << "map: " << map.cols << "x" << map.rows << " channels:" << map.channels() << " type:" << map.type() << std::endl;
 
-    // Load input target (colored, 4-channel, BGRA)
+    if (map.channels() == 3)
+    {
+        std::cout << "map: upgrading background to 4-channel (RGBA) image." << std::endl;
+
+        // quit, or fill the background with white pixels and convert it to BGR
+        cv::Mat bgra_bkg;
+        cv::cvtColor(map, bgra_bkg, cv::COLOR_BGR2BGRA);
+        map = bgra_bkg.clone();
+
+        std::cout << "map: new size " << map.size() <<
+                     " channels:" << map.channels() << " type:" << map.type() << std::endl;
+    }
+
+    /* Load input target: usually 4-channel (BGRA) */
+
     cv::Mat target = cv::imread("target.png", -1);
     if (target.empty())
     {
         std::cout << "!!! Failed imread() #2" << std::endl;
         return -1;
     }
-    std::cout << "target size: " << target.cols << "x" << target.rows << "channels: " << target.channels() << " type: " << target.type() << std::endl;
+    std::cout << "target size: " << target.cols << "x" << target.rows << " channels: " << target.channels() << " type: " << target.type() << std::endl;
 
-    if (target.channels() != 4)
+    if (target.channels() == 3)
     {
-        std::cout << "!!! A PNG image with transparent layer is required" << std::endl;
-        return -1;
+        std::cout << "target: upgrading foreground to 4-channel (RGBA) image." << std::endl;
+
+        // quit, or create an equivalent BGRA image
+        cv::Mat bgra_target;
+        cv::cvtColor(target, bgra_target, cv::COLOR_BGR2BGRA);
+        target = bgra_target.clone();
+
+        std::cout << "target: new size " << target.size() <<
+                     " channels:" << target.channels() << " type: " << target.type() << std::endl;
     }
 
     if (target.size().width > map.size().width || target.size().height > map.size().height)
