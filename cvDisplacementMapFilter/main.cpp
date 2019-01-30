@@ -21,7 +21,6 @@
  * output: the destination Mat.
  * location: offset starting point.
  */
-//void overlayImage(const cv::Mat &background, const cv::Mat &foreground, cv::Mat &output, cv::Point2i location)
 void overlayImage(const cv::Mat &background, const cv::Mat &foreground, cv::Mat &output, cv::Point2i location, double opacity = 1.0)
 {
     background.copyTo(output);
@@ -55,33 +54,6 @@ void overlayImage(const cv::Mat &background, const cv::Mat &foreground, cv::Mat 
             }
         }
     }
-}
-
-/* getComponent: helper function that returns the color of a specific component.
- *
- * bgr_pixel: the input BGR pixel of type cv::Vec3b.
- * bgr_component: the index of the channel. 0 for Blue, 1 for Green, 2 for Red.
- * This function returns the color of a pixel as unsigned char.
- */
-uchar getComponent(cv::Vec3b bgr_pixel, int bgr_component)
-{
-    switch (bgr_component)
-    {
-        case 0: // Blue
-        return bgr_pixel[0];
-
-        case 1: // Green
-        return bgr_pixel[1];
-
-        case 2: // Red
-        return bgr_pixel[2];
-
-        default:
-            std::cout << "!!! getComponent: " << bgr_component << " is not a valid component" << std::endl;
-        break;
-  }
-
-  return 0;
 }
 
 /* displacementMapFilter: uses the pixel values of a map to displace the pixels of the target image.
