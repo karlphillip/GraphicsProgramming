@@ -1,7 +1,7 @@
 GraphicsProgramming
 ===================
 
-Demos related to **OpenGL**, **Qt**, **OpenCV** and other X technologies.
+Demos related to **OpenGL**, **Qt/QML**, **OpenCV** and other X technologies.
 
 LinearRegression
 --------------
@@ -38,6 +38,10 @@ A simple watershed segmentation example using distance transform to segment bean
 cvFruitClassification
 --------------
 A C++/OpenCV port of [a cool Python application](http://github.com/eliezerb/FruitClassification) that performs Oranges vs Apples classification using LDA.
+
+qmlBattery
+--------------
+A Battery widget designed in QML that displays the amount energy left as horizontal bars according to the battery charge. On this demo, the charge of the battery is set dinamically and randomly from the C++ side.
 
 QtSerial
 --------------
