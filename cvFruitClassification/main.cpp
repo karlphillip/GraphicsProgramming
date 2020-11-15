@@ -38,16 +38,15 @@ int main()
      */
 
     // x_samples contains all the Apples' features for training
-    std::vector<Features> x_samples = load_training_set("apples");
+    std::vector<Features> x_samples = load_training_set("../cvFruitClassification/apples");
 
     // y_samples contains all the Orange's features for training
-    std::vector<Features> y_samples = load_training_set("oranges");
+    std::vector<Features> y_samples = load_training_set("../cvFruitClassification/oranges");
 
 
     /* Step 2: Create a Mat structure to store the training data */
 
-    unsigned int num_cols = 4; // aspect ratio, avg red, avg green, avg blue
-    unsigned int num_rows = x_samples.size() + y_samples.size();
+    unsigned int num_rows = static_cast<unsigned int>(x_samples.size() + y_samples.size());
     cv::Mat train_data;
     for (unsigned int i = 0; i < x_samples.size(); i++)
     {
@@ -100,7 +99,7 @@ int main()
 
     /* Step 5: test the classifier */
 
-    std::vector<Features> t_samples = load_training_set("test");
+    std::vector<Features> t_samples = load_training_set("../cvFruitClassification/test");
     for (unsigned int i = 0; i < t_samples.size(); i++)
     {
         // Each loop converts a Feature to a Mat's row

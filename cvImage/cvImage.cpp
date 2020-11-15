@@ -7,7 +7,8 @@
 #include <QApplication>
 #include <QStatusBar>
 
-#include <cv.h>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 
 cvImage::cvImage()
@@ -17,9 +18,9 @@ cvImage::cvImage()
     resize(480, 240);
 
     _menu = new QMenu("File");
-    _menu->addAction("Op3n", this, SLOT(_open()));
+    _menu->addAction("Open", this, SLOT(_open()));
     _menu->addSeparator();
-    _menu->addAction("Ex1t", this, SLOT(close()));
+    _menu->addAction("Exit", this, SLOT(close()));
     _menu_bar.addMenu(_menu);
 
     setMenuBar(&_menu_bar);
@@ -29,9 +30,6 @@ cvImage::~cvImage()
 {
     if (_menu)
         delete _menu;
-
-    if (_image)
-        delete _image;
 }
 
 void cvImage::paintEvent(QPaintEvent* e)
@@ -39,10 +37,10 @@ void cvImage::paintEvent(QPaintEvent* e)
     QPainter painter(this);
 
     // When no image has been loaded, there's nothing to draw.
-    if (!_image)
+    if (_image.isNull())
         return;
 
-    painter.drawImage(QPoint(0, 0), *_image);
+    painter.drawImage(QPoint(0, 0), _image);
 
     QWidget::paintEvent(e);
 }
@@ -55,34 +53,52 @@ void cvImage::_open()
                                                     QDir::currentPath(),
                                                     tr("Files (*.png *.jpg *.tiff *.bmp)"));
 
-    if (filename.isEmpty()) // Do nothing if filename is empty
+    // do nothing if filename is empty
+    if (filename.isEmpty())
         return;
 
-    cv::Mat img = cv::imread(filename.toStdString());
+    cv::Mat img = cv::imread(filename.toStdString(), -1);
     if (img.empty())
         return;
 
-    // Since OpenCV uses BGR order, we need to convert it to RGB
-    cv::cvtColor(img, img, CV_BGR2RGB);
-
-    // _image is created according to video dimensions
-    if (_image)
+    switch (img.channels())
     {
-        delete _image;
-    }
-    _image = new QImage(img.size().width, img.size().height, QImage::Format_RGB888);
+        case 1:
+        {
+            _image = QImage(img.data, img.cols, img.rows, img.step, QImage::Format_Grayscale8).copy();
+            qDebug() << "cvImage::_open GRAYSCALE";
+        }
+        break;
 
-    // Copy cv::Mat to QImage
-    memcpy(_image->scanLine(0), (unsigned char*)img.data, _image->width() * _image->height() * img.channels());
+        case 3:
+        {
+            // since OpenCV uses BGR order, we need to convert it to RGB
+            cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+            _image = QImage(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888).copy();
+            qDebug() << "cvImage::_open RGB";
+        }
+        break;
+
+        case 4:
+        {
+            _image = QImage(img.data, img.cols, img.rows, img.step, QImage::Format_ARGB32).copy();
+            qDebug() << "cvImage::_open RGBA";
+        }
+        break;
+
+        default:
+            qDebug() << "cvImage::_open !!! Unexpected number of channels: " <<  img.channels();
+        return;
+
+    }
 
     // Set the filename as the window title
     setWindowTitle(filename);
 
     // Resize the window to fit video dimensions
-    resize(img.size().width, img.size().height);
+    resize(img.cols, img.rows);
 
-    // Mouse move events will occur only when a mouse button is pressed down,
-    // unless mouse tracking has been enabled:
+    // Mouse move events will occur only when a mouse button is pressed down, unless mouse tracking has been enabled
     QWidget::setMouseTracking(true);
 
     // Trigger paint event to redraw the window
@@ -104,13 +120,13 @@ void cvImage::keyPressEvent(QKeyEvent* event)
 
 void cvImage::mouseMoveEvent(QMouseEvent *event)
 {
-    if (!_image)
+    if (_image.isNull())
         return;
 
     QPoint pos = event->pos();
-    if (pos.x() < 0 || pos.x() >= _image->width())
+    if (pos.x() < 0 || pos.x() >= _image.width())
         return;
-    if (pos.y() < 0 || pos.y() >= _image->height())
+    if (pos.y() < 0 || pos.y() >= _image.height())
         return;
 
     QString pos_x;
@@ -119,7 +135,7 @@ void cvImage::mouseMoveEvent(QMouseEvent *event)
     QString pos_y;
     pos_y = pos_y.setNum(pos.y());
 
-    QColor pixel(_image->pixel(pos));
+    QColor pixel(_image.pixel(pos));
     int r = pixel.red();
     int g = pixel.green();
     int b = pixel.blue();
@@ -127,13 +143,9 @@ void cvImage::mouseMoveEvent(QMouseEvent *event)
     QString pixel_info = pos_x + "," + pos_y + " R:" + QString().setNum(r) +
                                                " G:" + QString().setNum(g) +
                                                " B:" + QString().setNum(b);
+    //qDebug() << "cvImage::mouseMoveEvent " <<  pixel_info;
 
-    // TODO: set pixel info on status bar instead of window title
-    //this->statusBar()->setStatusTip(pixel_info);
-
-    setWindowTitle(pixel_info);
-
-    qDebug() << "cvImage::mouseMoveEvent " <<  pixel_info;
+    setWindowTitle(pixel_info);    
 }
 
 void cvImage::_close()

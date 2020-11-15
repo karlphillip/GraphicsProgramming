@@ -14,7 +14,7 @@
 #include <QImage>
 #include <QKeyEvent>
 
-#include <highgui.h>
+#include <opencv2/opencv.hpp>
 
 
 class cvWindow : public QMainWindow

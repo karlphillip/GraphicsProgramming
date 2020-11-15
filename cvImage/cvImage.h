@@ -5,8 +5,6 @@
 #include <QImage>
 #include <QKeyEvent>
 
-#include <highgui.h>
-
 
 class cvImage : public QMainWindow
 {
@@ -23,7 +21,7 @@ public:
 private:
     QMenuBar _menu_bar;
     QMenu* _menu;
-    QImage* _image;
+    QImage _image;
 
 private slots:
     void _open();

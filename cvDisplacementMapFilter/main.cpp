@@ -10,8 +10,8 @@
 #include <iostream>
 #include <vector>
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 /* overlayImage: copies a transparent 4-channel image over a solid background image.
  * Original source: http://jepsonsblog.blogspot.com.br/2012/10/overlay-transparent-image-in-opencv.html
@@ -50,7 +50,7 @@ void overlayImage(const cv::Mat &background, const cv::Mat &foreground, cv::Mat 
             for (int c = 0; opacity_level > 0 && c < output.channels(); ++c) {
                 unsigned char foregroundPx = foreground.data[fY * foreground.step + fX * foreground.channels() + c];
                 unsigned char backgroundPx = background.data[y * background.step + x * background.channels() + c];
-                output.data[y*output.step + output.channels()*x + c] = backgroundPx * (1.-opacity_level) + foregroundPx * opacity_level;
+                output.data[y*output.step + output.channels()*x + c] = (uchar) (backgroundPx * (1.-opacity_level) + foregroundPx * opacity_level);
             }
         }
     }
@@ -104,8 +104,8 @@ void displacementMapFilter(const cv::Mat& map, const cv::Mat& target, int compon
             *                            y + ((componentY(x, y) - 128) * scaleY) / 256)]
             */
 
-            int idx = (y * output.channels() * output.cols) + (x * output.channels()); // mapping 2D coordinates to 1D
-//            std::cout << "x:" << x << " y:" << y << " idx:" << idx << std::endl;
+            //int idx = (y * output.channels() * output.cols) + (x * output.channels()); // mapping 2D coordinates to 1D
+            //std::cout << "x:" << x << " y:" << y << " idx:" << idx << std::endl;
 
             // Access specific pixel/component from Map
             const uchar* pixel = ptr;
@@ -125,11 +125,43 @@ void displacementMapFilter(const cv::Mat& map, const cv::Mat& target, int compon
     }
 }
 
-int main(int argc, char* argv[])
+// From: https://stackoverflow.com/a/40314379/176769
+cv::Mat resizeKeepAspectRatio(const cv::Mat& input, const cv::Size& dstSize)
+{
+    cv::Mat output;
+
+    // initially no borders
+    int top = 0;
+    int down = 0;
+    int left = 0;
+    int right = 0;
+
+    double h1 = dstSize.width * (input.rows/(double)input.cols);
+    double w2 = dstSize.height * (input.cols/(double)input.rows);
+
+    if (h1 <= dstSize.height)
+    {
+        // only vertical borders
+        top = (int) ((dstSize.height - h1) / 2);
+        down = top;
+        cv::resize(input, output, cv::Size(dstSize.width, (int)h1));
+    }
+    else
+    {
+        // only horizontal borders
+        left = (int) ((dstSize.width - w2) / 2);
+        right = left;
+        cv::resize(input, output, cv::Size((int)w2, dstSize.height));
+    }
+
+    return output;
+}
+
+int main()
 {
     /* Load dispersion map: usually 3-channel (BGR) */
 
-    cv::Mat map = cv::imread("map.jpg");
+    cv::Mat map = cv::imread("../cvDisplacementMapFilter/map.jpg");
     if (map.empty())
     {
         std::cout << "!!! Failed imread() #1" << std::endl;
@@ -152,13 +184,15 @@ int main(int argc, char* argv[])
 
     /* Load input target: usually 4-channel (BGRA) */
 
-    cv::Mat target = cv::imread("target.png", -1);
+    cv::Mat target = cv::imread("../cvDisplacementMapFilter/target.png", -1);
     if (target.empty())
     {
         std::cout << "!!! Failed imread() #2" << std::endl;
         return -1;
     }
     std::cout << "target size: " << target.cols << "x" << target.rows << " channels: " << target.channels() << " type: " << target.type() << std::endl;
+
+    /* if the target image is not BGRA, make it! */
 
     if (target.channels() == 3)
     {
@@ -169,14 +203,20 @@ int main(int argc, char* argv[])
         cv::cvtColor(target, bgra_target, cv::COLOR_BGR2BGRA);
         target = bgra_target.clone();
 
-        std::cout << "target: new size " << target.size() <<
-                     " channels:" << target.channels() << " type: " << target.type() << std::endl;
+        std::cout << "target: new color space (BGRA)" <<std::endl;
     }
+
+    /* if the target image is larger than the map, resize it down */
 
     if (target.size().width > map.size().width || target.size().height > map.size().height)
     {
-        std::cout << "!!! Target needs to have smaller dimensions than map" << std::endl;
-        return -1;
+        std::cout << "target: resizing target image to map size" << std::endl;
+
+        cv::Mat resizedTarget = resizeKeepAspectRatio(target, map.size());
+        target = resizedTarget.clone();
+
+        std::cout << "target: new size " << target.size() <<
+                     " channels:" << target.channels() << " type: " << target.type() << std::endl;
     }
 
     /* Display the map as movie clip */

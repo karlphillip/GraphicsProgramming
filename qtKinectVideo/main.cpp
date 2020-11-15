@@ -1,4 +1,4 @@
-/* Copyright (C) 2015 Karl Phillip Buhr <karlphillip@gmail.com>
+/* Copyright (C) 2015-2020 Karl Phillip Buhr <karlphillip@gmail.com>
  *
  * This work is licensed under the Creative Commons Attribution-ShareAlike License.
  * To view a copy of this license, visit:

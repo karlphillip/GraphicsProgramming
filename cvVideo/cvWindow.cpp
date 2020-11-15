@@ -15,8 +15,6 @@
 #include <QTimer>
 #include <QApplication>
 
-#include <cv.h>
-
 
 cvWindow::cvWindow()
 : _menu(NULL), _image(NULL), _capture(NULL), _tick_ms(33), _ar_mode(Qt::IgnoreAspectRatio),
@@ -26,9 +24,9 @@ cvWindow::cvWindow()
     resize(480, 240);
 
     _menu = new QMenu("File");
-    _menu->addAction("Op3n", this, SLOT(_open()));
+    _menu->addAction("Open", this, SLOT(_open()));
     _menu->addSeparator();
-    _menu->addAction("Ex1t", this, SLOT(close()));
+    _menu->addAction("Exit", this, SLOT(close()));
     _menu_bar.addMenu(_menu);
 
 	setMenuBar(&_menu_bar);
@@ -67,14 +65,10 @@ void cvWindow::_tick()
     }
 
     // Since OpenCV uses BGR order, we need to convert it to RGB
-    cv::cvtColor(frame, frame, CV_BGR2RGB);
+    cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
 
     // Copy cv::Mat to QImage
     memcpy(_image->scanLine(0), (unsigned char*)frame.data, _image->width() * _image->height() * frame.channels());
-
-    // The same as above, but much worst.
-    //QImage img = QImage((uchar*) frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
-    //*_image = img.copy();
 
     // Trigger paint event to redraw the window
     update();
@@ -146,32 +140,39 @@ void cvWindow::_draw_video_frame(QPainter& painter)
 void cvWindow::_draw_info_text(QPainter& painter)
 {
     // Setup font properties
-    painter.setFont(QFont("Arial", 16));
+    painter.setFont(QFont("Arial", 8));
     painter.setPen(QPen(QColor("#2e8b57")));
 
     // Draw info about video dimensions
-    QString video_size = QString::number(_video_width) + "x" + QString::number(_video_height) ;
-    painter.drawText(QRect(10, 6, 100, 100), Qt::AlignLeft, video_size);
+    QString video_size = "Size: " + QString::number(_video_width) + "x" + QString::number(_video_height);
+    painter.drawText(QRect(10, height()*0.08, 200, 100), Qt::AlignLeft, video_size);
 
     // Draw info about FPS
     QString fps = "FPS: " + QString::number(_fps);
-    painter.drawText(QRect(10, 22, 100, 100), Qt::AlignLeft, fps);
+    painter.drawText(QRect(10, height()*0.12, 100, 100), Qt::AlignLeft, fps);
 
     // Draw selected AR mode
+    QString arModeStr = "AR: ";
     switch (_ar_mode)
     {
         case Qt::IgnoreAspectRatio:
-            painter.drawText(QRect(10, 37, 300, 100), Qt::AlignLeft, "IgnoreAspectRatio");
+            arModeStr += "IgnoreAspectRatio";
         break;
 
         case Qt::KeepAspectRatio:
-            painter.drawText(QRect(10, 37, 300, 100), Qt::AlignLeft, "KeepAspectRatio");
+            arModeStr += "KeepAspectRatio";
         break;
 
         case Qt::KeepAspectRatioByExpanding:
-            painter.drawText(QRect(10, 37, 300, 100), Qt::AlignLeft, "KeepAspectRatioByExpanding");
+            arModeStr += "KeepAspectRatioByExpanding";
+        break;
+
+        default:
+            arModeStr += "Unknown";
         break;
     }
+
+    painter.drawText(QRect(10, height()*0.16, 300, 100), Qt::AlignLeft, arModeStr);
 }
 
 void cvWindow::keyPressEvent(QKeyEvent* event)
@@ -239,9 +240,9 @@ void cvWindow::_open()
 
     // Retrieve the width/height of the video. If not possible, then use the current size of the window
     _video_width = 0;
-    _video_width = _capture->get(CV_CAP_PROP_FRAME_WIDTH);
+    _video_width = _capture->get(cv::CAP_PROP_FRAME_WIDTH);
     _video_height = 0;
-    _video_height = _capture->get(CV_CAP_PROP_FRAME_HEIGHT);
+    _video_height = _capture->get(cv::CAP_PROP_FRAME_HEIGHT);
     qDebug() << "cvWindow::_open default size is " << _video_width << "x" << _video_height;
 
     if (!_video_width || !_video_height)
@@ -255,7 +256,7 @@ void cvWindow::_open()
 
     // Retrieve fps from the video. If not available, default will be 25
     _fps = 0;
-    _fps = _capture->get(CV_CAP_PROP_FPS);
+    _fps = _capture->get(cv::CAP_PROP_FPS);
     qDebug() << "cvWindow::_open default fps is " << _fps;
 
     if (!_fps)

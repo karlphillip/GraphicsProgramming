@@ -1,3 +1,12 @@
+/* Copyright (C) 2012-2020 Karl Phillip Buhr <karlphillip@gmail.com>
+ *
+ * This work is licensed under the Creative Commons Attribution-ShareAlike License.
+ * To view a copy of this license, visit:
+ *      https://creativecommons.org/licenses/by-sa/2.5/legalcode
+ *
+ * Or to read the human-readable summary of the license:
+ *      https://creativecommons.org/licenses/by-sa/2.5/
+ */
 #include <iostream>
 #include <QApplication>
 #include <QImage>
@@ -109,7 +118,7 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-    QImage input("/Users/karlphillip/workspace/GraphicsProgramming/qtSmoothColorTransition/heightmap.jpg");
+    QImage input("../qtSmoothColorTransition/heightmap.jpg");
     if (input.isNull())
     {
         std::cout << "!!! Unable to load image" << std::endl;
@@ -230,7 +239,7 @@ int main(int argc, char* argv[])
 
     // Build colored elevation map
     QImage output = smooth_color_transition(input, colors);
-    output.save("/Users/karlphillip/workspace/GraphicsProgramming/qtSmoothColorTransition/output.jpg");
+    output.save("../qtSmoothColorTransition/output.jpg");
 
     QLabel output_label;
     output_label.setPixmap(QPixmap::fromImage(output));

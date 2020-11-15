@@ -30,9 +30,9 @@ void segment_fruit(const cv::Mat& src, cv::Mat& dst, std::vector<cv::Point>& lar
     cv::split(src ,bgr);
 
     cv::Mat thres_R, thres_G, thres_B;
-    cv::threshold(bgr[0], thres_B, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
-    cv::threshold(bgr[1], thres_G, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
-    cv::threshold(bgr[2], thres_R, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
+    cv::threshold(bgr[0], thres_B, 0, 255, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
+    cv::threshold(bgr[1], thres_G, 0, 255, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
+    cv::threshold(bgr[2], thres_R, 0, 255, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
     cv::Mat segmented = thres_B | thres_G | thres_R;
 
     int w = src.size().width;

@@ -1,4 +1,4 @@
-/* Copyright (C) 2014 Karl Phillip Buhr <karlphillip@gmail.com>
+/* Copyright (C) 2014-2020 Karl Phillip Buhr <karlphillip@gmail.com>
  *
  * This work is licensed under the Creative Commons Attribution-ShareAlike License.
  * To view a copy of this license, visit:
@@ -14,12 +14,12 @@
 #include <iostream>
 #include <vector>
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 int main()
 {
-    cv::Mat img = cv::imread("beans.png");
+    cv::Mat img = cv::imread("../cvWatershedSegmentation/beans.png");
     if (img.empty())
     {
         std::cout << "!!! Failed to open image" << std::endl;

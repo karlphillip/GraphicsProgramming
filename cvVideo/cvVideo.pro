@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT      += core gui
+QT      += core gui widgets
 
 contains(QT_VERSION, ^5\\.[0-8]\\..*) {
     message("* Using Qt $${QT_VERSION}.")
@@ -40,25 +40,38 @@ macx {
         -lopencv_imgproc
 }
 
-## OpenCV settings for Windows and OpenCV 2.4.2
+## OpenCV settings for Windows and OpenCV 4.5.0
 win32 {
     message("* Using settings for Windows.")
-    INCLUDEPATH += "C:\\opencv\\build\\include" \
-                   "C:\\opencv\\build\\include\\opencv" \
-                   "C:\\opencv\\build\\include\\opencv2"
+    INCLUDEPATH += "C:\\opencv\\build\\install\\include" \
+                   "C:\\opencv\\build\\install\\include\\opencv2" \
 
     CONFIG(debug, debug | release) {
-        LIBS += -L"C:\\opencv\\build\\x86\\vc10\\lib" \
-            -lopencv_core248d \
-            -lopencv_highgui248d \
-            -lopencv_imgproc248d
+        LIBS += -L"C:\\opencv\\build\\install\\x64\\vc16\\lib" \
+            -lopencv_core450d \
+            -lopencv_highgui450d \
+            -lopencv_imgproc450d \
+            -lopencv_imgcodecs450d \
+            -lopencv_videoio450d
+
+        # Projects > Build & Run > Run
+        # Check: add build library search path to PATH
+        # This allows OpenCV DLLs to be found when running this application
+        LIBS += -L"C:\\opencv\\build\\install\\x64\\vc16\\bin"
     }
 
     CONFIG(release, debug | release) {
-        LIBS += -L"C:\\opencv\\build\\x86\\vc10\\lib" \
-            -lopencv_core248 \
-            -lopencv_highgui248 \
-            -lopencv_imgproc248
+        LIBS += -L"C:\\opencv\\build\\install\\x64\\vc16\\lib" \
+            -lopencv_core450 \
+            -lopencv_highgui450 \
+            -lopencv_imgproc450 \
+            -lopencv_imgcodecs450 \
+            -lopencv_videoio450
+
+        # Projects > Build & Run > Run
+        # Check: add build library search path to PATH
+        # This allows OpenCV DLLs to be found when running this application
+        LIBS += -L"C:\\opencv\\build\\install\\x64\\vc16\\bin"
     }
 }
 

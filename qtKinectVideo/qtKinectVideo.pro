@@ -4,7 +4,7 @@
 # 1- Microsoft Visual Studio 2013 Express (for Desktop, online installer)
 #       https://www.visualstudio.com/downloads/download-visual-studio-vs
 #
-# 2- Qt 5.5.0 for Windows 32-bit (VS 2013, 633 MB)
+# 2- Qt 5.5.0 for Windows 32-bit (VS 2013, 633 MB) or later
 #       http://download.qt.io/official_releases/qt/5.5/5.5.0/qt-opensource-windows-x86-msvc2013-5.5.0.exe
 #
 # 3- Kinect for Windows SDK v1.8 (222MB)
@@ -14,7 +14,7 @@
 #	http://www.microsoft.com/en-us/download/confirmation.aspx?id=40276
 #
 
-QT += widgets
+QT += core gui widgets
 
 SOURCES += \
     main.cpp \
