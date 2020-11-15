@@ -8,7 +8,7 @@ Demo                       | Description             	       | Screenshot
 **cvDisplacementMapFilter** | A Displacement Map Filter implemenatation in C++/OpenCV that renders two images as a movie clip. | <img src="cvDisplacementMapFilter/screenshot.gif" width="200"/> 
 **cvFruitClassification** | C++/OpenCV port of [a cool Python application](http://github.com/eliezerb/FruitClassification) that performs Oranges vs Apples classification using LDA. | <img src="cvFruitClassification/screenshot.jpg" width="200"/> 
 **cvImage** | C++/Qt/OpenCV example that displays an image and the RGB values of a pixel based on mouse coordinates. | <img src="cvImage/screenshot.jpg" width="200"/> 
-**cvQTcameraGL** | Just another demo on how to use C++/OpenCV to retrieve frames from the camera and draw them in a Qt widget using an OpenGL context for GPU rendering. | <img src="cvQTcameraGL/screenshot.gif" width="200"/> 
+**cvQtCameraGL** | Just another demo on how to use C++/OpenCV to retrieve frames from the camera and draw them in a Qt widget using an OpenGL context for GPU rendering. | <img src="cvQtCameraGL/screenshot.gif" width="200"/> 
 **cvVideo** | A C++/OpenCV/Qt example on how to display video files with configurable Aspect Ratio. | <img src="cvVideo/screenshot.gif" width="200"/>
 **cvWatershedSegmentation** | [Stackoverflow answer](https://stackoverflow.com/a/25851951/176769) that uses C++/OpenCV's watershed segmentation with distance transform to segment beans. | <img src="cvWatershedSegmentation/screenshot.jpg" width="200"/> 
 **ipcQtGesture** | A C++/Qt application that uses the old *Intel® Perceptual Computing SDK 2013* for gesture recognition. Windows only. | No image available
