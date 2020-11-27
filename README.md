@@ -12,6 +12,7 @@ Demo                       | Description             	       | Screenshot
 **cvVideo** | A C++/OpenCV/Qt example on how to display video files with configurable Aspect Ratio. | <img src="cvVideo/screenshot.gif" width="200"/>
 **cvWatershedSegmentation** | [Stackoverflow answer](https://stackoverflow.com/a/25851951/176769) that uses C++/OpenCV's watershed segmentation with distance transform to segment beans. | <img src="cvWatershedSegmentation/screenshot.jpg" width="200"/> 
 **ipcQtGesture** | A C++/Qt application that uses the old *Intel® Perceptual Computing SDK 2013* for gesture recognition. Windows only. | No image available
+**qmlRayTracing2D** | A QML implementation of 2D raycasting from [Daniel Shiffman](https://www.youtube.com/watch?v=TOEi6T2mtHo). | <img src="qmlRayTracing2D/screenshot.gif" width="200"/> 
 **qmlBattery** | A Qt/QML Battery element that displays the amount of energy left as horizontal bars according to the charge. On this demo, the charge is set dynamically and randomly from the C++ side. | <img src="qmlBattery/screenshot.gif" width="200"/> 
 **qtArduinoSerial** | An C++/Qt example on how to print data from a serial (COM) port connected to Arduino. | No image available
 **qtFPSvsTIMEAnimation** | A C++/Qt implementation of FPS-based and Time-based animation techniques, as explained by [Steven Lambert](http://blog.sklambert.com/using-time-based-animation-implement/) | <img src="qtFPSvsTIMEAnimation/screenshot.gif" width="180"/> 

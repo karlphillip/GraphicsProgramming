@@ -16,7 +16,7 @@ Battery {
 
 Screenshot
 --------------
-<img src="screenshot.jpg" alt="Screenshot" width="427" height="330">
+<img src="screenshot.gif" alt="Screenshot" width="300" height="300">
 
 
 

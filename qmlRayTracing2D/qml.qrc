@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Boundary.qml</file>
+        <file>Ray.qml</file>
+        <file>Particle.qml</file>
+        <file>draw.js</file>
+    </qresource>
+</RCC>
