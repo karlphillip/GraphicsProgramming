@@ -1,6 +1,6 @@
-# qmlRayTracing2D
+# qmlRayCasting2D
 
-A naive implementation of 2D raytracing using line segment "surfaces" and vector "rays".
+A naive implementation of 2D raycasting using line segment "surfaces" and vector "rays".
 
 <img src="screenshot.gif" alt="Screenshot" width="400" height="400">
 
