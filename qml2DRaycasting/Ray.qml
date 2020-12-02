@@ -12,7 +12,7 @@ Item {
     property vector2d pos: Qt.vector2d(0, 0)    // starting position of the ray
     property vector2d dir: fromAngle(angle)     // unit vector that guides the direction of the light
 
-    property var raySize: 8                     // size of the ray for debugging purposes
+    property var raySize: 16                     // size of the ray for debugging purposes
 
     // show: draw the light of ray on the screen (red)
     function show(ctx) {

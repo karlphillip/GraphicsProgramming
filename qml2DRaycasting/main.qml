@@ -7,25 +7,38 @@ import "draw.js" as Draw
 
 Window {
     id: window
-    width: 600
-    height: 600
+    width: 800
+    height: 800
     visible: true
-    title: qsTr("2D Raytracing")
+    title: qsTr("2D Raycasting")
     color: "black"
+
+    property bool showFps: true
+    property int frameCounter: 0
+    property real fps: 0.0
 
     Canvas {
         id: canvas
         anchors.fill: parent
 
+        // change default render target to FBO: utilizes OpenGL hardware acceleration rather than rendering into system memory
+        renderTarget: Canvas.FramebufferObject
+
+        // change default render strategy to Threaded: context will defer graphics commands to a private rendering thread
+        renderStrategy: Canvas.Threaded
+
+        // store latest mouse move coordinates
         property vector2d mousePoint: Qt.vector2d(0, 0)
-        property var walls: createListOfWalls();
+
+        // specify wall size and create walls
         property int numWalls: 5
+        property var walls: createListOfWalls(numWalls);
 
         // a single light particle that emits rays on all directions
         Particle {
             id: particle
             pos: Qt.vector2d(canvas.mousePoint.x, canvas.mousePoint.y)
-            numRays: 200
+            numRays: 64
         }
 
         // drawing procedure
@@ -50,21 +63,49 @@ Window {
             // find if any of these rays in the particle are able to intercept the boundary
             //particle.lookWall(walls[0], ctx);
             particle.look(walls, ctx);
+
+            // increment frame counter
+            window.frameCounter++;
         }
 
-        // refresh the canvas automatically every 33 milliseconds
+        // try to refresh the canvas every 5ms
         Timer {
-            interval: 33
+            interval: 5
             running: true
             repeat: true
-            onTriggered: canvas.requestPaint()
+
+            property double startTime: 0.0
+            property double elapsedTime: 0.0
+            property double msPerFrame: 0.0
+
+            onTriggered: {
+                if (startTime === 0)
+                    startTime = new Date().getTime();
+
+                elapsedTime = new Date().getTime() - startTime;
+
+                if (elapsedTime >= 1000) {
+                    // compute FPS
+                    msPerFrame = elapsedTime / window.frameCounter;
+                    window.fps = 1000 / msPerFrame;
+
+                    // reset start time and fps count
+                    startTime = 0;
+                    window.frameCounter = 0;
+                }
+
+                // trigger canvas.onPaint()
+                canvas.requestPaint()
+
+                //console.log("FPS:" + fps);
+            }
         }
 
         // createListOfWalls: creates a list of random walls on the screen
-        function createListOfWalls() {
-            var list = new Array(canvas.numWalls);
+        function createListOfWalls(size) {
+            var list = new Array(size);
 
-            for (let i = 0; i < canvas.numWalls; ++i) {
+            for (let i = 0; i < size; ++i) {
                 var component = Qt.createComponent("Boundary.qml");
                 if (component === null) {
                     console.log("Canvas !!! error creating component");
@@ -101,5 +142,25 @@ Window {
             canvas.mousePoint.x = mouse.x;
             canvas.mousePoint.y = mouse.y;
         }
+    }
+
+    Item {
+        focus: true
+
+        Keys.onPressed: {
+            if (event.key === Qt.Key_F) {
+                console.log("onPressed: F");
+                showFps = !showFps;
+                event.accepted = true;
+            }
+        }
+    }
+
+
+    Text {
+        anchors.right: parent.right
+        color: "lime"
+        text: qsTr("FPS: " + window.fps.toFixed(1))
+        visible: window.showFps
     }
 }

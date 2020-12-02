@@ -8,20 +8,26 @@ Item {
     id: particle
 
     property var pos: Qt.vector2d(0, 0)
-    property var rays: createListOfRays()
-    property var numRays: 30; // the amount of light rays that this particle emits
+    property var numRays: 32; // default value: the amount of light rays that this particle emits
+    property var rays: createListOfRays(numRays)
 
-    function show(ctx) {
-        Draw.circle(ctx, pos.x, pos.y, 4, "white");
+    property int size: 5
+    property var color: "white"
+    property var lightColor: "yellow"
 
+    function show(ctx) {        
         for (let i = 0; i < rays.length; ++i)
             rays[i].show(ctx);
+
+        Draw.circle(ctx, pos.x, pos.y, particle.size, particle.color);
     }
 
-    // createListOfRays: returns a list of QML components of type Ray
-    function createListOfRays() {
-        var list = new Array(numRays);
-        const incSize =  360 / numRays;
+    // createListOfRays: returns a list of QML items of type Ray
+    function createListOfRays(size) {
+        // preallocate improves performance? var list = new Array(size);
+        var list = [];
+
+        const incSize =  360 / size;
 
         for (let i = 0, x = 0; i < 360; i += incSize, ++x) {
             var component = Qt.createComponent("Ray.qml");
@@ -67,7 +73,7 @@ Item {
 
             // check if the point of intersection exists
             if (pt)
-                Draw.line(ctx, particle.pos.x, particle.pos.y, pt.x, pt.y, "yellow");
+                Draw.line(ctx, particle.pos.x, particle.pos.y, pt.x, pt.y, particle.lightColor);
         }
     }
 
@@ -95,7 +101,7 @@ Item {
             }
 
             if (closestIntersectionPt)
-                Draw.line(ctx, particle.pos.x, particle.pos.y, closestIntersectionPt.x, closestIntersectionPt.y, "yellow");
+                Draw.line(ctx, particle.pos.x, particle.pos.y, closestIntersectionPt.x, closestIntersectionPt.y, particle.lightColor);
         }
     }
 
