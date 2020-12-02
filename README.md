@@ -14,7 +14,7 @@ Demo                       | Description             	       | Screenshot
 **ipcQtGesture** | A C++/Qt application that uses the old *Intel® Perceptual Computing SDK 2013* for gesture recognition. Windows only. | No image available
 **qml2DRaycasting** | A QML implementation of 2D raycasting based on [Daniel Shiffman](https://www.youtube.com/watch?v=TOEi6T2mtHo) coding challenge. | <img src="qml2DRaycasting/screenshot.gif" width="200"/> 
 **qml2DRaycastingEngine** | A QML implementation of 2D raycasting engine inspired by [Daniel Shiffman](https://www.youtube.com/watch?v=vYgIKn7iDH8) coding challenge. | <img src="qml2DRaycastingEngine/screenshot.gif" width="200"/> 
-**qmlBattery** | A Qt/QML Battery element that displays the amount of energy left as horizontal bars according to the charge. On this demo, the charge is set dynamically and randomly from the C++ side. | <img src="qmlBattery/screenshot.gif" height="195"/> 
+**qmlBattery** | A Qt/QML Battery element that displays the amount of energy left as horizontal bars according to the charge. On this demo, the charge is set dynamically and randomly from the C++ side. | <img src="qmlBattery/screenshot.gif" width="200"/> 
 **qtArduinoSerial** | An C++/Qt example on how to print data from a serial (COM) port connected to Arduino. | No image available
 **qtFPSvsTIMEAnimation** | A C++/Qt implementation of FPS-based and Time-based animation techniques, as explained by [Steven Lambert](http://blog.sklambert.com/using-time-based-animation-implement/) | <img src="qtFPSvsTIMEAnimation/screenshot.gif" width="180"/> 
 **qtKinectVideo** | C++/Qt application based on "Color Basics" from Kinect for Windows SDK 1.8. This demo shows how to display the Color Stream. | No image available
