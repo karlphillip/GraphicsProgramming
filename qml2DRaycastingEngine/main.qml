@@ -159,7 +159,7 @@ Window {
             list[2] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW, canvas.sceneH), "b": Qt.vector2d(0, canvas.sceneH) });
             list[3] = component.createObject(canvas, { "a": Qt.vector2d(0, canvas.sceneH), "b": Qt.vector2d(0, 0) });
 
-            /* create the internal walls of the maze */
+            /* create the walls of the right side of maze */
 
             list[4] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.15),
                                                        "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.15) });
@@ -173,12 +173,19 @@ Window {
             list[7] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.85),
                                                        "b": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.85) });
 
+            /* create the walls of the left side of maze */
 
             list[8] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.15),
-                                                       "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.40) });
+                                                       "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.15) });
 
-            list[9] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.60),
-                                                       "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.85) });
+            list[9] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.15),
+                                                       "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.25) });
+
+            list[10] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.25),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.25) });
+
+            list[11] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.25),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.15) });
 
             return list;
         }
