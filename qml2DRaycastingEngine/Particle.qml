@@ -143,11 +143,16 @@ Item {
                     // euclidian distance
                     let dist = distance(particle.pos, pt);
 
-                    // angle of the ray relative to the direction of the camera
-                    const a = ray.heading - particle.heading;
-
                     // decrease fisheye effect
                     if (!fisheye) {
+                        // calculate the angle diference between the ray and the "camera"
+                        let a = particle.heading - ray.heading;
+                        if (a < 0)
+                            a += 2*Math.PI;
+                        if (a > 2*Math.PI)
+                            a -= 2*Math.PI;
+
+                        // multiply the euclidian distance by the cosine of the new angle
                         dist *= Math.cos(a);
                     }
 
