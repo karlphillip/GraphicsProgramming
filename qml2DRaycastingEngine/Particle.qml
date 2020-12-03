@@ -8,7 +8,7 @@ import "draw.js" as Draw
 Item {
     id: particle
 
-    property var pos: Qt.vector2d(2, 2)     // starting position of the particle inside the canvas
+    property var pos: Qt.vector2d(0, 0)     // starting position of the particle inside the canvas
     property var heading: 0                 // the current direction of the particle (angle in radians)
 
     property var numRays: 30;               // the amount of light rays that this particle emits
@@ -31,16 +31,17 @@ Item {
 
     // rotate: called when the head of the particle is turned by keypresses
     function rotate(angle) {
-        //console.log("Particle.rotate angle=" + angle)
         particle.heading += angle;
 
         const startAngle = -particle.fov/2;
-        const incAngle =  particle.fov / size;
+        const incAngle =  particle.fov/numRays;
+
+        //console.log("Particle.rotate angle=" + angle + " particle.heading=" + particle.heading + " startAngle=" + startAngle + " incAngle=" + incAngle);
 
         let a = startAngle;
         for (let i = 0; i < particle.rays.length; ++i) {
             particle.rays[i].setAngle(degToRad(a) + particle.heading);
-            a++;
+            a += incAngle;
         }
     }
 
@@ -71,6 +72,14 @@ Item {
 
     // createListOfRays: returns a list of QML components of type Ray
     function createListOfRays(size) {
+        var component = Qt.createComponent("Ray.qml");
+        if (component === null) {
+            // Error Handling
+            console.log("Particle !!! error creating component");
+            console.log(component.errorString());
+            return;
+        }
+
         var list = [];
         const startAngle = -particle.fov/2;
         const endAngle = particle.fov/2;
@@ -78,13 +87,6 @@ Item {
 
         // create N rays within the FOV
         for (let i = startAngle, x = 0; i < endAngle; i += incAngle, ++x) {
-            var component = Qt.createComponent("Ray.qml");
-            if (component === null) {
-                // Error Handling
-                console.log("Particle !!! error creating component");
-                console.log(component.errorString());
-                return;
-            }
 
             const radians = degToRad(i)
             //console.log("Particle: i=" + i + " radians=" + radians);
@@ -143,8 +145,11 @@ Item {
 
                     // angle of the ray relative to the direction of the camera
                     const a = ray.heading - particle.heading;
-                    if (!fisheye)
+
+                    // decrease fisheye effect
+                    if (!fisheye) {
                         dist *= Math.cos(a);
+                    }
 
                     if (dist < recordDist) {
                         recordDist = dist;

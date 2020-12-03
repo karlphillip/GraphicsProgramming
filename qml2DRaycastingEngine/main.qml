@@ -20,7 +20,7 @@ Window {
     // a single light particle that emits rays on all directions
     Particle {
         id: particle
-        pos: Qt.vector2d(200, 200)
+        pos: Qt.vector2d(window.width/4, window.height/2)
         numRays: 50
     }
 
@@ -87,7 +87,7 @@ Window {
                 let c = mapRange(sq, 0, wSq, 255, 0) / 255.0;
                 let grayShade = Qt.rgba(c, c, c, 1);
 
-                // also, the further an object is, the shorter the height of its rect
+                // the distance of a ray to the wall says how high the wall has to be drawn: the further the wall is, the shorter its height has to be
                 let h = mapRange(scene[i], 0, sceneW, sceneH, 0);
 
                 // adjust the wall drawing so that its geometric center is in the middle the right canvas
@@ -103,11 +103,12 @@ Window {
             window.frameCounter++;
         }
 
+        // mapRange: converts value from inMin..inMax range into the outMin..outMax range
         function mapRange(value, inMin, inMax, outMin, outMax) {
            return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
         }
 
-        // refresh the canvas automatically every 5ms
+        // refresh canvas automatically every 5ms
         Timer {
             interval: 5
             running: true
