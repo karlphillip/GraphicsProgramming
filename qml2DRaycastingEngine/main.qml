@@ -28,7 +28,7 @@ Window {
     Canvas {
         id: canvas
         anchors.fill: parent
-        //antialiasing: true
+        antialiasing: true
 
         // change default render target to FBO: utilizes OpenGL hardware acceleration rather than rendering into system memory
         renderTarget: Canvas.FramebufferObject
@@ -39,6 +39,9 @@ Window {
         // define two windows for rendering where each occupy half the canvas
         property var sceneW: window.width / 2
         property var sceneH: window.height
+
+        // distance of the projection plane to the player
+        property var distProjPlane: (sceneW/2) / Math.tan(particle.fov/2);
 
         // create the labirynth
         property var walls: createListOfWalls();
@@ -60,40 +63,54 @@ Window {
             for (let wall of walls)
                 wall.show(ctx);
 
+            /* draw the light rays emitted by the particle */
+
+            // calculates if a ray is able to intercept a wall: the "scene" is an array that stores
+            // the distance of a ray to the point of interception with a wall
+            const scene = particle.look(walls, ctx);
+
             /* draw particle/player */
 
             particle.show(ctx);
 
             /* draw "3D walls" on the second canvas
-             * note: the depth of a wall is given by scene[i] and so its the color
+             * note: the distance to a wall is given by scene[i] and the color its derived from this number
              */
 
-            // find if any of the rays emitted by the particle is able to intercept a wall and
-            // store those distances to the walls in the scene list
-            const scene = particle.look(walls, ctx);
-            const w = sceneW / scene.length; //            
+            // width of each pixel column: its the width of the canvas div by the number of rays
+            const w = sceneW / particle.rays.length;
 
             // push transform matrix and translate to the second canvas so that all subsequent drawing is made on the second canvas
             ctx.save();
             ctx.translate(sceneW, 0);
 
-            for (let i = 0; i < scene.length; ++i) {
-                //console.log("scene #" + i + " = " + scene[i]);
-
-                const sq = scene[i] * scene[i];
-                const wSq = sceneW * sceneW;
-
+            // raycasting: use the distance of the rays to the walls to generate a semi-looking 3D environment
+            for (let i = 0; i < particle.rays.length; ++i) {
                 // map the distance to an equivalent color: invert the value so that objects closest to the particle are brighter
-                let c = mapRange(sq, 0, wSq, 255, 0) / 255.0;
-                let grayShade = Qt.rgba(c, c, c, 1);
+                const rayDist = scene[i]; // depth
+                const c = mapRange(rayDist, 0, sceneH, 255, 0) / 255.0;
+                const grayShade = Qt.rgba(c, c, c, 1);
 
-                // the distance of a ray to the wall says how high the wall has to be drawn: the further the wall is, the shorter its height has to be
-                let h = mapRange(scene[i], 0, sceneW, sceneH, 0);
+                /* calculate the height of the wall that needs to be projected
+                 *
+                 * actual wall height     projected wall height  (h?)
+                 * ------------------  =  ---------------------
+                 *  distance to wall      distance from player to proj. plane
+                 *
+                 *
+                 *                                   sceneH -> actual wall height
+                 *                                  rayDist -> distance of the particle to the wall
+                 *                            distProjPlane -> distance from particle to the projection plane
+                 * h = (sceneW / scene[i]) * distProjPlane  ->  projected wall height
+                 *
+                 * Reference: https://courses.pikuma.com/courses/take/raycasting/lessons/7503441-wall-projection
+                 */
+                const h = (sceneW / rayDist) * distProjPlane;
 
-                // adjust the wall drawing so that its geometric center is in the middle the right canvas
-                const rectX = (i*w+w/2) - w/2;
-                const rectY = (sceneH/2) - h/2;
-                Draw.rect(ctx, rectX, rectY, w+1, h, grayShade, false);
+                // draw pixel column
+                const xPos = i * w;             // (i*w+w/2) - w/2
+                const yPos = (sceneH/2) - (h/2);
+                Draw.rect(ctx, xPos, yPos, w+1, h, grayShade, false);
             }
 
             // pop transform matrix
@@ -167,25 +184,33 @@ Window {
             list[5] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.15),
                                                        "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.40) });
 
-            list[6] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.60),
-                                                       "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.85) });
+            /* create the lonely box on the top-left side of maze */
 
-            list[7] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.85),
-                                                       "b": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.85) });
-
-            /* create the walls of the left side of maze */
-
-            list[8] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.15),
+            list[6] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.15),
                                                        "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.15) });
 
-            list[9] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.15),
+            list[7] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.15),
                                                        "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.25) });
 
-            list[10] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.25),
+            list[8] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.25),
                                                         "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.25) });
 
-            list[11] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.25),
+            list[9] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.25),
                                                         "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.15) });
+
+            /* create the lonely box on the bottom-left side of maze */
+
+            list[10] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.75),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.75) });
+
+            list[11] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.75),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.85) });
+
+            list[12] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.85),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.85) });
+
+            list[13] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.85),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.75) });
 
             return list;
         }
@@ -234,6 +259,10 @@ Window {
                     console.log("onPressed: P fisheye=" + particle.fisheye);
                     break;
 
+                case Qt.Key_Escape:
+                    Qt.quit();
+                    break;
+
                  default:
                      break;
             }
@@ -244,6 +273,7 @@ Window {
     Text {
         anchors.right: parent.right
         color: "lime"
+        font.pointSize: 14
         text: qsTr("FPS: " + window.fps.toFixed(1))
         visible: window.showFps
     }
