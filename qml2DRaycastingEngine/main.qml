@@ -21,7 +21,7 @@ Window {
     Particle {
         id: particle
         pos: Qt.vector2d(window.width/4, window.height/2)
-        numRays: 100
+        numRays: 80
     }
 
     // on this example, the canvas is split into two halfs: the first draws the raycasting and the second draws the world rendering
@@ -53,10 +53,11 @@ Window {
 
             /* clear screen and draw both canvas */
 
-            // draw black background on the left, canvas separator (vertical) and then white background on the right
-            Draw.rect(ctx,      0, 0, sceneW, sceneH, "black");
-            Draw.rect(ctx, sceneW, 0, sceneW, sceneH, "black");
-            Draw.line(ctx, sceneW, 0, sceneW, sceneH, "red", 2); // lineWidth=2
+            // draw black background on the left, canvas separator (vertical) and then black background on the right
+            Draw.rect(ctx,      0, 0, sceneW, sceneH, "black");             // canvas #1
+            Draw.rect(ctx, sceneW, 0, sceneW, sceneH/2, "blue");            // canvas #2: sky
+            Draw.rect(ctx, sceneW, sceneH/2, sceneW, sceneH/2, "brown");    // canvas #2: floor
+            Draw.line(ctx, sceneW, 0, sceneW, sceneH, "red", 2);            // line separator between canvas (lineWidth=2)
 
             /* draw the maze */
 
