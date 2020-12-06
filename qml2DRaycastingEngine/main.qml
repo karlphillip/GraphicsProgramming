@@ -21,7 +21,7 @@ Window {
     Particle {
         id: particle
         pos: Qt.vector2d(window.width/4, window.height/2)
-        numRays: 50
+        numRays: 100
     }
 
     // on this example, the canvas is split into two halfs: the first draws the raycasting and the second draws the world rendering
@@ -174,44 +174,115 @@ Window {
             list[0] = component.createObject(canvas, { "a": Qt.vector2d(0, 0), "b": Qt.vector2d(canvas.sceneW, 0) });
             list[1] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW, 0), "b": Qt.vector2d(canvas.sceneW, canvas.sceneH) });
             list[2] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW, canvas.sceneH), "b": Qt.vector2d(0, canvas.sceneH) });
-            list[3] = component.createObject(canvas, { "a": Qt.vector2d(0, canvas.sceneH), "b": Qt.vector2d(0, 0) });
+            list[3] = component.createObject(canvas, { "a": Qt.vector2d(0, canvas.sceneH), "b": Qt.vector2d(0, 0) });          
 
-            /* create the walls of the right side of maze */
+            /* create the boxes on the top-left side of maze */
 
-            list[4] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.15),
-                                                       "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.15) });
+            // box #1
+            list[4] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.15),
+                                                       "b": Qt.vector2d(canvas.sceneW*0.40, canvas.sceneH*0.15) });
 
-            list[5] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.15),
-                                                       "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.40) });
+            list[5] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.40, canvas.sceneH*0.15),
+                                                       "b": Qt.vector2d(canvas.sceneW*0.40, canvas.sceneH*0.25) });
 
-            /* create the lonely box on the top-left side of maze */
-
-            list[6] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.15),
-                                                       "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.15) });
-
-            list[7] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.15),
+            list[6] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.40, canvas.sceneH*0.25),
                                                        "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.25) });
 
-            list[8] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.25),
-                                                        "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.25) });
+            list[7] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.25),
+                                                       "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.15) });
 
-            list[9] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.25),
-                                                        "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.15) });
+            // box #2
+            list[8] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.10, canvas.sceneH*0.35),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.35) });
 
-            /* create the lonely box on the bottom-left side of maze */
+            list[9] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.35),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.45) });
 
-            list[10] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.75),
-                                                        "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.75) });
+            list[10] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.45),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.10, canvas.sceneH*0.45) });
 
-            list[11] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.75),
-                                                        "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.85) });
+            list[11] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.10, canvas.sceneH*0.45),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.10, canvas.sceneH*0.35) });
 
-            list[12] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.85),
+            /* create the lonely L box on the top-right side of maze */
+
+            list[12] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.15),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.90, canvas.sceneH*0.15) });
+
+            list[13] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.90, canvas.sceneH*0.15),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.90, canvas.sceneH*0.45) });
+
+            list[14] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.90, canvas.sceneH*0.45),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.45) });
+
+            list[15] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.45),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.25) });
+
+            list[16] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.25),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.25) });
+
+            list[17] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.25),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.15) });
+
+            /* create the lonely box on the bottom-right side of maze */
+
+            list[18] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.55),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.90, canvas.sceneH*0.55) });
+
+            list[19] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.90, canvas.sceneH*0.55),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.90, canvas.sceneH*0.85) });
+
+            list[20] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.90, canvas.sceneH*0.85),
                                                         "b": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.85) });
 
-            list[13] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.85),
+            list[21] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.85),
                                                         "b": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.75) });
 
+            list[22] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.60, canvas.sceneH*0.75),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.70, canvas.sceneH*0.75) });
+
+            list[23] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.70, canvas.sceneH*0.75),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.70, canvas.sceneH*0.65) });
+
+            list[24] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.70, canvas.sceneH*0.65),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.65) });
+
+            list[25] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.65),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.80, canvas.sceneH*0.55) });
+
+            /* create the small L box on the bottom-left side of maze */
+
+            list[26] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.10, canvas.sceneH*0.55),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.55) });
+
+            list[27] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.55),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.65) });
+
+            list[28] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.65),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.65) });
+
+            list[29] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.65),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.75) });
+
+            list[30] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.20, canvas.sceneH*0.75),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.10, canvas.sceneH*0.75) });
+
+            list[31] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.10, canvas.sceneH*0.75),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.10, canvas.sceneH*0.55) });
+
+            /* create the single box on the bottom-left side of maze */
+
+            list[32] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.75),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.40, canvas.sceneH*0.75) });
+
+            list[33] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.40, canvas.sceneH*0.75),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.40, canvas.sceneH*0.85) });
+
+            list[34] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.40, canvas.sceneH*0.85),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.85) });
+
+            list[35] = component.createObject(canvas, { "a": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.85),
+                                                        "b": Qt.vector2d(canvas.sceneW*0.30, canvas.sceneH*0.75) });
             return list;
         }
 
