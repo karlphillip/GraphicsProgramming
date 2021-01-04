@@ -10,6 +10,6 @@ Other supported features include:
 - Loading vertices, faces and texture coordinates from simple Wavefront files;
 - Loading external JPG/PNG texture images;
 
-<img src="screenshot.gif" alt="Screenshot" width="400" height="200">
+<img src="screenshot.gif" alt="Screenshot">
 
 Its dependency on Qt is just to be able to load PNG/JPG textures and create the window that displays the pixels from the Color Buffer. Minor changes are required to port the renderer to other GUI frameworks (SDL, GTK+, EFL, ...).
