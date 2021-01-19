@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>draw.js</file>
+        <file>Rect.qml</file>
+        <file>Point.qml</file>
+        <file>QuadTree.qml</file>
+    </qresource>
+</RCC>

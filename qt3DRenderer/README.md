@@ -13,11 +13,13 @@ A complete 3D software renderer written in C++:
 - Flat Shading;
 
 Other supported features include:
+- UV Mapping;
 - Loading vertices, faces and texture coordinates from Wavefront files;
 - Loading external JPG/PNG texture images;
 
 Its dependency on Qt is just to be able to load PNG/JPG textures and create the window that displays the pixels. 
-A few minor changes are required in order to port the renderer to other GUI frameworks (SDL, GTK+, EFL, ...).
 
-References:
+Minor changes are required to port this renderer to other GUI frameworks (SDL, GTK+, EFL, ...).
+
+**References**
 - [Pikuma: 3D Graphics Programming](https://courses.pikuma.com/courses/learn-computer-graphics-programming)

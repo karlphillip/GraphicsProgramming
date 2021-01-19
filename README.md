@@ -15,6 +15,7 @@ Demo                       | Description             	       | Screenshot
 **qml2DRaycasting** | A QML implementation of 2D raycasting. | <img src="qml2DRaycasting/screenshot.gif" width="200"/> 
 **qml2DRaycastingEngine** | A QML implementation of a 2D raycasting engine. | <img src="qml2DRaycastingEngine/screenshot.gif" width="200"/> 
 **qmlBattery** | A Qt/QML Battery element that displays the amount of energy left as horizontal bars according to the charge. On this demo, the charge is set dynamically and randomly from the C++ side. | <img src="qmlBattery/screenshot.gif" width="200"/> 
+**qmlQuadTree** | A Qt/QML implementation and visualization of the data structure *Quadtree* that implements operations to *insert* new points and *search* them within a rectangular area. | <img src="qmlQuadTree/screenshot.gif" width="200"/> 
 **qt3DRenderer** | A complete 3D Graphics Renderer that demonstrates how to load simple meshes from Wavefront files (with texture) and perform all the required transformations to project them on a 2D color buffer for display in Qt. | <img src="qt3DRenderer/screenshot.gif" width="200"/> 
 **qtArduinoSerial** | An C++/Qt example on how to print data from a serial (COM) port connected to Arduino. | No image available
 **qtFPSvsTIMEAnimation** | A C++/Qt implementation of FPS-based and Time-based animation techniques, as explained by [Steven Lambert](http://blog.sklambert.com/using-time-based-animation-implement/) | <img src="qtFPSvsTIMEAnimation/screenshot.gif" width="180"/> 
