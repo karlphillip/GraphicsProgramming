@@ -14,7 +14,7 @@ Demo                       | Description             	       | Screenshot
 **ipcQtGesture** | C++/Qt application that uses the old *Intel® Perceptual Computing SDK 2013* for gesture recognition. Windows only. | No image available
 **qml2DRaycasting** | QML implementation of 2D raycasting. | <img src="qml2DRaycasting/screenshot.gif" width="200"/> 
 **qml2DRaycastingEngine** | QML implementation of a 2D raycasting engine. | <img src="qml2DRaycastingEngine/screenshot.gif" width="200"/> 
-**qml2DQuadTree** | QML implementation and visualization of the data structure *Quadtree* that offers operations to *insert* new points and *search* them within a rectangular area. | <img src="qmlQuadTree/screenshot.gif" width="200"/> 
+**qml2DQuadTree** | QML implementation and visualization of the data structure *Quadtree* that offers operations to *insert* new points and *search* them within a rectangular area. | <img src="qml2DQuadTree/screenshot.gif" width="200"/> 
 **qml3DTerrain** | Qt3D/QML implementation of dynamic terrain generation based on Perlin noise. | <img src="qml3DTerrain/screenshot.gif" width="200"/> 
 **qmlBattery** | A C++/QML Battery element that displays the amount of energy left as horizontal bars according to the charge. On this demo, the charge is set dynamically and randomly from the C++ side. | <img src="qmlBattery/screenshot.gif" width="200"/> 
 **qt3DRenderer** | A complete 3D Graphics Renderer that demonstrates how to load simple meshes from Wavefront files (with texture) and perform all the required transformations to project them on a 2D color buffer for display in Qt. | <img src="qt3DRenderer/screenshot.gif" width="200"/> 
