@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>TerrainEntity.qml</file>
+        <file>WireframeMaterial.qml</file>
+        <file>WireframeEffect.qml</file>
+        <file>shaders/robustwireframe.frag</file>
+        <file>shaders/robustwireframe.geom</file>
+        <file>shaders/robustwireframe.vert</file>
+    </qresource>
+</RCC>
