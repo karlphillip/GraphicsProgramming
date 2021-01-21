@@ -8,6 +8,7 @@ Entity {
     id: root
     property var cols : 2
     property var rows : 2
+    property real xoff
     property real yoff
 
     /* validateRange: doesn't let the total number of indices in a mesh be larger
@@ -41,14 +42,14 @@ Entity {
     PlaneMesh {
         id: customMesh
         width: 10.0
-        height: 8.0
+        height: 20.0
         meshResolution: evalMeshSize()
     }
 
     Transform {
         id: transform
         translation: Qt.vector3d(0.0, 0.0, 0.0)
-        rotationX: 25 // 90
+        rotationX: 10 // 90
     }
 
     PhongAlphaMaterial {

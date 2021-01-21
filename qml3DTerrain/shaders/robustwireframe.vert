@@ -55,11 +55,15 @@ float cnoise(vec2 P){
   return 2.3 * n_xy;
 }
 
+float map(float value, float min1, float max1, float min2, float max2) {
+  return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+}
+
 /*
  * Entry Point: main()
  */
-float heightFactor = 1.8;
-float widthFactor = 5.0;
+float magFactor = 0.8;
+float widthFactor = 0.4;
 
 void main()
 {
@@ -69,9 +73,13 @@ void main()
     gl_Position = mvp * vec4( vertexPosition, 1.0 );
 
     /* adjust y position based on Perlin noise:
-     * - widthFactor: allows the mountains to be more spreaded apart from each other
-     * - heightFactor: increases the size of the mountains
+     * - widthFactor: spread the mountains apart from each other
+     * - magFactor: increases the magnitude of the mountains (aka. heightFactor)
      */
-    float noise = cnoise(vec2(gl_Position.x/widthFactor, gl_Position.y+yoff));
-    gl_Position.y += noise * heightFactor;
+    float noise = cnoise(vec2((gl_Position.x+xoff)*widthFactor, gl_Position.y+yoff));
+    gl_Position.y += noise * magFactor;
+
+
+    //float terrainHeight = map(noise, 0.0, 1.0, -0.5, 0.5);
+    //gl_Position.y += terrainHeight * heightFactor;
 }

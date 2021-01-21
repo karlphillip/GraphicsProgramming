@@ -11,7 +11,7 @@ Rectangle {
 
     property var w: _window.width
     property var h: _window.height
-    property var scale: 20
+    property var scale: 10
 
     MouseArea {
        id: mouseArea
@@ -46,7 +46,7 @@ Rectangle {
                 RenderSettings {
                     activeFrameGraph: ForwardRenderer {
                         id: renderer
-                        clearColor: "black"
+                        clearColor: "white"
                         camera: mainCamera
                     }
                 }
@@ -56,21 +56,31 @@ Rectangle {
                 id: terrain
                 cols: window.w / window.scale
                 rows: window.h / window.scale
+                xoff: 0
                 yoff: 0
 
                 /* animate the mesh uses robustwireframe.vert to create the elevations */
 
-                SequentialAnimation {
+                NumberAnimation {
+                    target: terrain;
+                    property: "xoff";
+                    duration: 60*1000; // 60sec
+                    from: 0.0
+                    to: 40.0
+
                     loops: Animation.Infinite
                     running: true
+                }
 
-                    NumberAnimation {
-                        target: terrain;
-                        property: "yoff";
-                        duration: 60*1000; // 60sec
-                        from: 0.0
-                        to: 200.0
-                    }
+                NumberAnimation {
+                    target: terrain;
+                    property: "yoff";
+                    duration: 60*1000; // 60sec
+                    from: 0.0
+                    to: 40.0
+
+                    loops: Animation.Infinite
+                    running: true
                 }
             }
         }

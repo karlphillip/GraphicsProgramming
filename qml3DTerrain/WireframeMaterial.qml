@@ -12,6 +12,7 @@ Material {
     property color lineColor: Qt.rgba( 1.0, 1.0, 1.0, 1.0 ) // set wireframe color: white
 
     // variable that controls Perlin noise in the vertex shader
+    property real xoff: 0.0
     property real yoff: 0.0
 
     parameters: [
@@ -21,6 +22,7 @@ Material {
         Parameter { name: "shininess"; value: root.shininess },
         Parameter { name: "line.width"; value: root.lineWidth },
         Parameter { name: "line.color"; value: root.lineColor },
+        Parameter { name: "xoff"; value: root.yoff },
         Parameter { name: "yoff"; value: root.yoff }
     ]
 }
