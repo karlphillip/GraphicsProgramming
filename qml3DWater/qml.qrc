@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>CustomTerrainEntity.qml</file>
+        <file>WaterEntity.qml</file>
+        <file>perlin.js</file>
+        <file>shaders/phong.inc.frag</file>
+        <file>shaders/terrain.frag</file>
+        <file>shaders/terrain.vert</file>
+        <file>shaders/light.inc.frag</file>
+        <file>PhongShadingMaterial.qml</file>
+        <file>TextureEntity.qml</file>
+        <file>CrystalEntity.qml</file>
+        <file>WaterMaterial.qml</file>
+        <file>shaders/water.vert</file>
+        <file>shaders/water.frag</file>
+        <file>TerrainEntity.qml</file>
+        <file>TreeEntity.qml</file>
+    </qresource>
+</RCC>
