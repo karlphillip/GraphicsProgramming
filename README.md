@@ -1,4 +1,3 @@
-```
 GraphicsProgramming
 ===================
 
@@ -27,4 +26,3 @@ Demo                       | Description             	       | Screenshot
 **qtLinearRegressionGD** | C++/Qt/Eigen implementation of Linear Regression based on [Daniel Shiffman's tutorials](https://www.youtube.com/watch?v=szXbuO3bVRk). Data is plotted with [Madplotlib](https://github.com/madplotlib/madplotlib) (Qt required). | <img src="qtLinearRegressionGD/screenshot.jpg" width="200"/> 
 **qtLogoBlurGL** | A silly C++/Qt/OpenGL demo that renders a logo on a texture and displays a glow around it. | <img src="qtLogoBlurGL/screenshot.jpg" width="200"/> 
 **qtSmoothColorTransition** | A C++/Qt application that takes a grayscale image and performs a smooth color transition using a predefined color palette based on linear interpolation. | <img src="qtSmoothColorTransition/screenshot.jpg" width="200"/>
-```
