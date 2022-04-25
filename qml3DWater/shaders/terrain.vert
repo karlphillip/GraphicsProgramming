@@ -29,8 +29,8 @@ void main()
 {
     // pass through
     texCoord = vertexTexCoord;
-    vec3 worldNormal = normalize(modelNormalMatrix * vertexNormal);
-    vec3 worldPosition = vec3(modelMatrix * vec4(vertexPosition, 1.0));
+    worldNormal = normalize(modelNormalMatrix * vertexNormal);
+    worldPosition = vec3(modelMatrix * vec4(vertexPosition, 1.0));
 
     // calculate Phong on the vertex shader
     worldView = normalize(eyePosition - worldPosition);
