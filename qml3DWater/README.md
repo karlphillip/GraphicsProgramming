@@ -9,7 +9,7 @@ The water is just a simple a `PlaneMesh` entity and most of the work is done by 
 - Specular highlights are based on a Normal map;
 - The mesh of the water is not changed at all by the vertex shader;
 
-<img src="screenshot.gif" alt="Screenshot" width="400" height="400">
+<img src="screenshot.gif" alt="Screenshot" width="800" height="492">
 
 **References**:
 
